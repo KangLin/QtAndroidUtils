@@ -1,4 +1,6 @@
-ANDROID_PACKAGE_SOURCE_DIR += $$PWD  #ANDROID包的源码目录  
+#ANDROID source directory, Please set it in main profile 
+
+isEmpty(ANDROID_PACKAGE_SOURCE_DIR) : ANDROID_PACKAGE_SOURCE_DIR = $$PWD
 
 include(jni/jni.pri)
 

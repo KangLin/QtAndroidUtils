@@ -2,7 +2,7 @@
  * Author: KangLin(kl222@!26.com) 
  */
 
-#include "JavaUtils.h"
+#include "AndroidUtils.h"
 #include <QtAndroid>
 #include <QAndroidJniExceptionCleaner>
 
@@ -13,15 +13,15 @@
     env->ExceptionClear(); \
     }
 
-CJavaUtils::CJavaUtils(QObject *parent) :  QObject(parent)
+CAndroidUtils::CAndroidUtils(QObject *parent) :  QObject(parent)
 {
 }
 
-CJavaUtils::~CJavaUtils()
+CAndroidUtils::~CAndroidUtils()
 {
 }
 
-int CJavaUtils::InitPermissions()
+int CAndroidUtils::InitPermissions()
 {
     int nRet = 0;
     static bool inited = false;
@@ -60,17 +60,20 @@ int CJavaUtils::InitPermissions()
     QAndroidJniObject mainActive = QtAndroid::androidActivity();
     CHECK_EXCEPTION();
     if(mainActive.isValid())
+    {
         QAndroidJniObject::callStaticMethod<void>(
                 "org/KangLinStudio/Utils",
                 "verifyStoragePermissions",
                 "(Ljava/lang/Object;)V",
                 mainActive.object<jobject>());
         CHECK_EXCEPTION();
-    else {
+    }
+    else
+    {
         qDebug() << "QtAndroid::androidActivity() isn't valid\n";
     }
 #endif
-    
+
     return nRet;
 }
 
@@ -78,7 +81,7 @@ int CJavaUtils::InitPermissions()
   The following permission must be set in AndroidManifest.xml:
   <uses-permission android:name="android.permission.VIBRATE"/>
 */
-int CJavaUtils::Vibrate(long duration)
+int CAndroidUtils::Vibrate(long duration)
 {
     QAndroidJniEnvironment env;
     QAndroidJniObject active = QtAndroid::androidActivity();
@@ -104,7 +107,7 @@ int CJavaUtils::Vibrate(long duration)
   The following permission must be set in AndroidManifest.xml:
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
 */
-bool CJavaUtils::ScreenWake(bool bWake)
+bool CAndroidUtils::ScreenWake(bool bWake)
 {
     QAndroidJniEnvironment env;
     static QAndroidJniObject screenLock;
@@ -144,7 +147,7 @@ bool CJavaUtils::ScreenWake(bool bWake)
     return true;    
 }
 
-QString CJavaUtils::GetAppClassName()
+QString CAndroidUtils::GetAppClassName()
 {
     QAndroidJniObject appInfo = QtAndroid::androidActivity().callObjectMethod(
                     "getApplicationInfo",
@@ -154,7 +157,7 @@ QString CJavaUtils::GetAppClassName()
         
 }
 
-QString CJavaUtils::GetAppPackageName()
+QString CAndroidUtils::GetAppPackageName()
 {
     return QtAndroid::androidActivity().callObjectMethod<jstring>("getPackageName").toString();
 }

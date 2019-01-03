@@ -8,13 +8,13 @@
 #include <QObject>
 #include <QtAndroidExtras>
 
-class Q_CORE_EXPORT CJavaUtils : public QObject
+class Q_CORE_EXPORT CAndroidUtils : public QObject
 {
     Q_OBJECT
     
 public:
-    CJavaUtils(QObject *parent = nullptr);
-    virtual ~CJavaUtils();
+    CAndroidUtils(QObject *parent = nullptr);
+    virtual ~CAndroidUtils();
     
     static int InitPermissions();
     static int Vibrate(long duration = 100);

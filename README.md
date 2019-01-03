@@ -47,7 +47,7 @@ Autrhor: KangLin(kl222@126.com)
 
     +  then git submodle from this project to the application's android directory:
 
-          $ cd application_root/android
+          $ cd application_root/android  
           $ git submodule add https://github.com/KangLin/AndroidUtils.git
 
     + Add android/android.pri to application's android.pri
@@ -63,6 +63,14 @@ Autrhor: KangLin(kl222@126.com)
           java.srcDirs = [qt5AndroidDir + '/src', 'src', 'android_lib/android/src', 'java']
 
 ---
+
+## Contribute
+
+![Alipay contribute( More than ￥20 )](https://raw.githubusercontent.com/KangLin/RabbitIm/master/Resource/png/zhifubao.png  "Alipay contribute( More than ￥20 )")
+![WeChat payment( More than ￥20 )](https://github.com/KangLin/RabbitIm/blob/master/Resource/png/weixinpay.png "WeChat payment( More than ￥20 )")
+
+![Alipay contribute](https://raw.githubusercontent.com/KangLin/RabbitIm/master/Resource/png/zhifubao20.png  "Alipay contribute")
+![WeChat payment](https://github.com/KangLin/RabbitIm/blob/master/Resource/png/weixinpay20.png "WeChat payment")
 
 ## Community :beers:
 - [GitHub](https://github.com/KangLin/AndroidUtils)

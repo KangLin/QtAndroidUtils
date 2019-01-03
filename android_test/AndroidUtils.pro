@@ -37,6 +37,7 @@ FORMS += \
 CONFIG += mobility
 MOBILITY = 
 
+OTHER_FILES += ../README.md
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

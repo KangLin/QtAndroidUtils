@@ -15,6 +15,11 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     
+private slots:
+    void on_pbVibrate_clicked();
+    
+    void on_pbScreenWake_clicked();
+    
 private:
     int ShowDirectory();
     

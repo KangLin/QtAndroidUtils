@@ -31,14 +31,14 @@ Autrhor: KangLin(kl222@126.com)
   - If the application hasn't its own android source code
     + Add the project to the application
 
-          $ cd applicat_root
-          $ git submodule add https://github.com/KangLin/AndroidUtils.git
+          $ cd application_root
+          $ git submodule add https://github.com/KangLin/AndroidUtils.git android
 
     + Add android/android.pri to application's main profile
 
           $ cd application_root
           $ vim application.pro
-          android: include(android/android.pri)
+          android: include(android/android/android.pri)
 
   - If the application has its own android source code. ag: application_root/android
 
@@ -47,20 +47,20 @@ Autrhor: KangLin(kl222@126.com)
 
     +  then git submodle from this project to the application's android directory:
 
-          $ cd application_root/android  
-          $ git submodule add https://github.com/KangLin/AndroidUtils.git
+            $ cd application_root/android  
+            $ git submodule add https://github.com/KangLin/AndroidUtils.git
 
     + Add android/android.pri to application's android.pri
 
           $ cd application_root/android
           $ vim android.pri
-          android: include(android/android.pri)
+          android: include(AndroidUtils/android/android.pri)
 
-    + Modify  build.gradle to add 'android_lib/android/src' to java.srcDirs
+    + Modify  build.gradle to add 'AndroidUtils/android/src' to java.srcDirs
 
           $ cd application_root/android
           $ vim build.gradle
-          java.srcDirs = [qt5AndroidDir + '/src', 'src', 'android_lib/android/src', 'java']
+          java.srcDirs = [qt5AndroidDir + '/src', 'src', 'AndroidUtils/android/src', 'java']
 
 ---
 

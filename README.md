@@ -11,16 +11,16 @@ Autrhor: KangLin(kl222@126.com)
 <!-- tocstop -->
 ## Source directory
 
-    |-- android/         #The library source code
+    |-- android/         # The library source code
     |
-    |-- android_test/    #Test the library code
+    |-- daemon/          # The library daemon code
 
 
 ---
 
 ## Build
 
-+ Use Qtcreate open android_test/AndroidUtils.pro 
++ Use Qtcreate open daemon/AndroidUtils.pro 
 + build 
 
 ---

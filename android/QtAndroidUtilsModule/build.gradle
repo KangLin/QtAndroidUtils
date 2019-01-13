@@ -12,18 +12,13 @@ buildscript {
 repositories {
     google()
     jcenter()
-    flatDir{
-        dirs 'libs'
-    }
 }
 
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //TODO: The first compilation needs to disable the following line
-    //  Enable the following line after generate module library
-    //implementation(name:'QtAndroidUtilsModule-debug', ext:'aar')
+    implementation 'com.android.support:support-v4:24.1.1'
 }
 
 android {
@@ -47,13 +42,13 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
-            aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
-            res.srcDirs = [qt5AndroidDir + '/res', 'module/res', 'res']
+            java.srcDirs = ['src', 'java']
+            aidl.srcDirs = ['src', 'aidl']
+            res.srcDirs = ['res']
             resources.srcDirs = ['src']
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
-            jniLibs.srcDirs = ['libs']
+            //jniLibs.srcDirs = ['libs']
        }
     }
 

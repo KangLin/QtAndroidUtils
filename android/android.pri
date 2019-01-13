@@ -2,15 +2,13 @@
 
 isEmpty(ANDROID_PACKAGE_SOURCE_DIR) : ANDROID_PACKAGE_SOURCE_DIR = $$PWD
 
-include(jni/jni.pri)
+include(QtAndroidUtilsModule/QtAndroidUtilsModule.pri)
 
+# TODO: Check if there is the module*.aar file under the directory of
+#       $$ANDROID_PACKAGE_SOURCE_DIR/libs 
+# if don't exist, then add settings.gradle to $$ANDROID_PACKAGE_SOURCE_DIR
 OTHER_FILES += \
     $$PWD/AndroidManifest.xml \
-    $$PWD/build.gradle
+    $$PWD/build.gradle \
+    $$PWD/settings.gradle
 
-DISTFILES += \
-    $$PWD/src/org/KangLinStudio/* \
-    $$PWD/res/drawable-hdpi/* \
-    $$PWD/res/drawable-ldpi/* \
-    $$PWD/res/drawable-mdpi/* \
-    $$PWD/res/drawable-nodpi/* 

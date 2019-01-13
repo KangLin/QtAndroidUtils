@@ -13,7 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-import org.qtproject.qt5.android.bindings.QtActivity;
+//import org.qtproject.qt5.android.bindings.QtActivity;
 
 /**
  * Helper class for showing and canceling message
@@ -101,7 +101,7 @@ public class MessageNotification {
             PendingIntent.getActivity(
                 context,
                 0,
-                new Intent(context, QtActivity.class),
+                new Intent(context, context.getClass()),
                 PendingIntent.FLAG_UPDATE_CURRENT)
                 );
         if(null == largeIcon)

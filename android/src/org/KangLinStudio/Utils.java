@@ -19,7 +19,7 @@ public class Utils {
     *
     * @param activity
     */
-    public static void verifyStoragePermissions(Object activity) {
+    public static void verifyStoragePermissions(final Activity activity) {
         // Storage Permissions
         int REQUEST_EXTERNAL_STORAGE = 1;
         String[] PERMISSIONS_STORAGE = {

@@ -21,6 +21,20 @@
     <item row="0" column="1">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <widget class="QPushButton" name="pbNotification">
+        <property name="text">
+         <string>Notification</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbCancelNotify">
+        <property name="text">
+         <string>Cancel notification</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pbVibrate">
         <property name="text">
          <string>Vibrate</string>

@@ -1,14 +1,21 @@
 # Qt android utils
 
 Autrhor: KangLin(kl222@126.com)
+
+---
+
 <!-- toc -->
 
 - [Source directory](#Source-directory)
 - [Build](#Build)
 - [Other application use the library](#Other-application-use-the-library)
+- [Contribute](#Contribute)
 - [Community :beers:](#Community-beers)
 
 <!-- tocstop -->
+
+---
+
 ## Source directory
 
     |-- android/         # The library source code
@@ -20,7 +27,7 @@ Autrhor: KangLin(kl222@126.com)
 
 ## Build
 
-+ Use Qtcreate open daemon/AndroidUtils.pro 
++ Use Qtcreate open daemon/QtAndroidUtils.pro 
 + build 
 
 ---
@@ -32,7 +39,7 @@ Autrhor: KangLin(kl222@126.com)
     + Add the project to the application
 
           $ cd application_root
-          $ git submodule add https://github.com/KangLin/AndroidUtils.git android
+          $ git submodule add https://github.com/KangLin/QtAndroidUtils.git android
 
     + Add android/android.pri to application's main profile
 
@@ -48,19 +55,20 @@ Autrhor: KangLin(kl222@126.com)
     +  then git submodle from this project to the application's android directory:
 
             $ cd application_root/android  
-            $ git submodule add https://github.com/KangLin/AndroidUtils.git
+            $ git submodule add https://github.com/KangLin/QtAndroidUtils.git
 
     + Add android/android.pri to application's android.pri
 
           $ cd application_root/android
           $ vim android.pri
-          android: include(AndroidUtils/android/android.pri)
+          android: include(QtAndroidUtils/android/android.pri)
 
-    + Modify  build.gradle to add 'AndroidUtils/android/src' to java.srcDirs
+    + Modify  build.gradle to add 'QtAndroidUtils/android/src' to java.srcDirs
 
           $ cd application_root/android
           $ vim build.gradle
-          java.srcDirs = [qt5AndroidDir + '/src', 'src', 'AndroidUtils/android/src', 'java']
+          java.srcDirs = [qt5AndroidDir + '/src', 'src', 'QtAndroidUtils/android/src', 'java']
+          res.srcDirs = [qt5AndroidDir + '/res', 'res', 'QtAndroidUtils/android/src']
 
 ---
 
@@ -73,4 +81,4 @@ Autrhor: KangLin(kl222@126.com)
 ![WeChat payment](https://github.com/KangLin/RabbitIm/blob/master/Resource/png/weixinpay20.png "WeChat payment")
 
 ## Community :beers:
-- [GitHub](https://github.com/KangLin/AndroidUtils)
+- [GitHub](https://github.com/KangLin/QtAndroidUtils.git)

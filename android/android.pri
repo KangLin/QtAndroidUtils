@@ -9,4 +9,8 @@ OTHER_FILES += \
     $$PWD/build.gradle
 
 DISTFILES += \
-    $$PWD/src/org/KangLinStudio/*
+    $$PWD/src/org/KangLinStudio/* \
+    $$PWD/res/drawable-hdpi/* \
+    $$PWD/res/drawable-ldpi/* \
+    $$PWD/res/drawable-mdpi/* \
+    $$PWD/res/drawable-nodpi/* 

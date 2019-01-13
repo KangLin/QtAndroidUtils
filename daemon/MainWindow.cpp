@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 #include "AndroidDirectory.h"
 #include "AndroidUtils.h"
+#include "Notification.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ShowDirectory();
+    CAndroidUtils::InitPermissions();
 }
 
 MainWindow::~MainWindow()
@@ -45,4 +47,18 @@ void MainWindow::on_pbScreenWake_clicked()
     static bool bEnable = false;
     CAndroidUtils::ScreenWake(bEnable);
     bEnable = !bEnable;
+}
+
+void MainWindow::on_pbNotification_clicked()
+{
+    static int n = 0;
+    QString text("Text ");
+    text += QString::number(n++);
+    //CNotification m_Notify;
+    m_Notify.Show(text, "Title", 10);
+}
+
+void MainWindow::on_pbCancelNotify_clicked()
+{
+    m_Notify.CanCelAll();
 }

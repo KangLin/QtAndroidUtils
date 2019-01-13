@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "Notification.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,11 +21,16 @@ private slots:
     
     void on_pbScreenWake_clicked();
     
+    void on_pbNotification_clicked();
+    
+    void on_pbCancelNotify_clicked();
+    
 private:
     int ShowDirectory();
     
 private:
     Ui::MainWindow *ui;
+    CNotification m_Notify;
 };
 
 #endif // MAINWINDOW_H

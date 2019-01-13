@@ -64,7 +64,7 @@ int CAndroidUtils::InitPermissions()
         QAndroidJniObject::callStaticMethod<void>(
                 "org/KangLinStudio/Utils",
                 "verifyStoragePermissions",
-                "(Ljava/lang/Object;)V",
+                "(Landroid/app/Activity;)V",
                 mainActive.object<jobject>());
         CHECK_EXCEPTION();
     }

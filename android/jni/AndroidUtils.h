@@ -6,7 +6,6 @@
 #define JAVAUTIL_H
 
 #include <QObject>
-#include <QtAndroidExtras>
 
 class Q_CORE_EXPORT CAndroidUtils : public QObject
 {

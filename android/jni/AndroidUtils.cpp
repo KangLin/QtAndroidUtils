@@ -5,6 +5,7 @@
 #include "AndroidUtils.h"
 #include <QtAndroid>
 #include <QAndroidJniExceptionCleaner>
+#include <QtAndroidExtras>
 
 #define CHECK_EXCEPTION() \
     if(env->ExceptionCheck())\

@@ -18,12 +18,12 @@ public:
     
 private slots:
     void on_pbVibrate_clicked();
-    
     void on_pbScreenWake_clicked();
-    
     void on_pbNotification_clicked();
-    
     void on_pbCancelNotify_clicked();
+#if defined(Q_OS_ANDROID)
+    void slotApplicationStateChanged(Qt::ApplicationState state);
+#endif
     
 private:
     int ShowDirectory();

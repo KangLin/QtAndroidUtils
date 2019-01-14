@@ -14,9 +14,15 @@ LIBS += -ljnigraphics
 SOURCES += \ 
     $$PWD/AndroidDirectory.cpp \
     $$PWD/AndroidUtils.cpp \
-    $$PWD/Notification.cpp
+    $$PWD/Notification.cpp 
 
 HEADERS += \ 
     $$PWD/AndroidDirectory.h \
     $$PWD/AndroidUtils.h \
-    $$PWD/Notification.h
+    $$PWD/Notification.h 
+
+equals(BUILD_TEST, 1){
+    DEFINES += BUILD_TEST
+    SOURCES += $$PWD/Test.cpp
+    HEADERS += $$PWD/Test.h
+}

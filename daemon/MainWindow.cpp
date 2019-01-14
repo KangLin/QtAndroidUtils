@@ -3,6 +3,12 @@
 #include "AndroidDirectory.h"
 #include "AndroidUtils.h"
 #include "Notification.h"
+#include <QtDebug>
+#include <QApplication>
+
+#ifdef BUILD_TEST
+    #include "Test.h"
+#endif
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,6 +17,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ShowDirectory();
     CAndroidUtils::InitPermissions();
+    bool check = connect(
+                 qApp,
+                 SIGNAL(applicationStateChanged(Qt::ApplicationState)),
+                 this,
+                 SLOT(slotApplicationStateChanged(Qt::ApplicationState))
+                );
+    Q_ASSERT(check);
+#ifdef BUILD_TEST
+    CTest::TestTimeout();
+#endif
 }
 
 MainWindow::~MainWindow()
@@ -62,4 +78,10 @@ void MainWindow::on_pbNotification_clicked()
 void MainWindow::on_pbCancelNotify_clicked()
 {
     m_Notify.CanCelAll();
+}
+
+void MainWindow::slotApplicationStateChanged(Qt::ApplicationState state)
+{
+    qDebug() << "State: " << state;
+    
 }

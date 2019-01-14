@@ -130,7 +130,6 @@ rabbitim.kdev4
 Doxygen/
 Doxyfile
 android/local.properties
-android/gradle.properties
 android/gradlew.*
 
 

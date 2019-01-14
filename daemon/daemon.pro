@@ -44,3 +44,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 android: include(../android/android.pri)
 
+RESOURCES += \
+    Resources.qrc
+

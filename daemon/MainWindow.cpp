@@ -55,7 +55,8 @@ void MainWindow::on_pbNotification_clicked()
     QString text("Text ");
     text += QString::number(n++);
     //CNotification m_Notify;
-    m_Notify.Show(text, "Title", 10);
+    m_Notify.Show(text, "Title", 10,
+                  QImage(":/icon/app"), QImage(":/icon/app"));
 }
 
 void MainWindow::on_pbCancelNotify_clicked()

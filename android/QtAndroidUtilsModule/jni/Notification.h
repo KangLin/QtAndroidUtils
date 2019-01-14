@@ -4,6 +4,7 @@
 #pragma once
 
 #include <QObject>
+#include <QImage>
 
 class CNotification : public QObject
 {
@@ -19,6 +20,12 @@ public:
              int nNum,
              const QString &szSmallIcon,
              const QString &szLargeIcon = QString());
+    int Show(const QString &szText,
+             const QString &szTitle,
+             int nNum,
+             const QImage &smallIcon,
+             const QImage &largeIcon = QImage());
+    
     int Cancel();
     static int CanCelAll();
     

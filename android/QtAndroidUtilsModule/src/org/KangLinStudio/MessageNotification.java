@@ -61,7 +61,6 @@ public class MessageNotification {
                           
                 // Set required fields, including the small icon, the
                 // notification title, and text.
-                
                 .setContentTitle(title)
                 .setContentText(text)
                           
@@ -109,10 +108,24 @@ public class MessageNotification {
         else
             builder.setLargeIcon(largeIcon);
         if(null == smallIcon)
-            Log.d(NOTIFICATION_TAG, "smallIcon is null");
+            Log.e(NOTIFICATION_TAG, "SmallIcon is null, must set setSmallIcon");
         else
             builder.setSmallIcon(smallIcon);
         notify(context, builder.build(), id);            
+    }
+
+    public static void notify(final Context context,
+                              final String text,
+                              final String title,
+                              final int number,
+                              final int id,
+                              final Bitmap smallIcon,
+                              final Bitmap largeIcon
+                              ) {
+        Icon icon = null;
+        if(null != smallIcon)
+            icon = Icon.createWithBitmap(smallIcon);
+        notify(context, text, title, number, id, icon, largeIcon);
     }
 
     /*

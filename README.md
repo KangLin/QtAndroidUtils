@@ -47,39 +47,6 @@ Autrhor: KangLin(kl222@126.com)
           $ vim application.pro
           android: include(android/android/android.pri)
 
-    + First disable dependencies module library
-    
-          $ cd application_root/android/android
-          $ vim build.gradle
-          dependencies {
-              implementation fileTree(dir: 'libs', include: ['*.jar'])
-              // TODO: The first compilation needs to disable the following line
-              //  Enable the following line after generate module library
-              //implementation(name:'QtAndroidUtilsModule-debug', ext:'aar')
-          }
-          
-    + Build and generate module library. The library name is determined by the build configuration. module library's position: $build_root/android-build/QtAndroidUtilsModule/build/outputs/aar/QtAndroidUtilsModule-*.aar
-    + Copy QtAndroidUtilsModule-*.aar to application_root/android/android/libs
-    
-          $ cd application_root/android/android
-          $ mkdir -p libs
-          $ cd libs
-          $ cp $build_root/android-build/module/build/outputs/aar/QtAndroidUtilsModule-*.aar .
-    
-    + Modify  build.gradle to 
-
-          $ cd application_root/android/android
-          $ vim build.gradle
-
-         * enable 'implementation(name:'QtAndroidUtilsModule-debug', ext:'aar')' to dependencies
-
-          dependencies {
-              implementation fileTree(dir: 'libs', include: ['*.jar'])
-              // TODO: The first compilation needs to disable the following line
-              //  Enable the following line after generate module library
-              implementation(name:'QtAndroidUtilsModule-debug', ext:'aar')
-          }
-
   - If the application has its own android source code. ag: application_root/android
 
         $ ls application_root/android
@@ -90,47 +57,25 @@ Autrhor: KangLin(kl222@126.com)
             $ cd application_root/android  
             $ git submodule add https://github.com/KangLin/QtAndroidUtils.git
 
-    + Add android/android.pri to application's android.pri
+    + Add QtAndroidUtils/android/android.pri to application's android.pri
 
           $ cd application_root/android
           $ vim android.pri
           android: include(QtAndroidUtils/android/android.pri)
 
-    + Generate module library. add settings.gradle
+    + Generate module library: add settings.gradle
 
           $ cd application_root/android
-          $ cat ''include ':QtAndroidUtils/android/QtAndroidUtilsModule'"" >> settings.gradle
+          $ vim settings.gradle
+          include ':QtAndroidUtils/android/QtAndroidUtilsModule'
           
-    + Build and generate module library. The library name is determined by the build configuration. module library's position: $build_root/android-build/QtAndroidUtilsModule/build/outputs/aar/QtAndroidUtilsModule-*.aar
-    + Copy QtAndroidUtilsModule-*.aar to application_root/android/android/libs
-    
-          $ cd application_root/android
-          $ mkdir -p libs
-          $ cd libs
-          $ cp $build_root/android-build/QtAndroidUtils/android/QtAndroidUtilsModule/build/outputs/aar/QtAndroidUtilsModule-*.aar .
-          
-    + Modify  build.gradle to 
+    + Modify build.gradle to add implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule') to dependencies
 
           $ cd application_root/android
           $ vim build.gradle
-
-         * add 'implementation(name:'QtAndroidUtilsModule-debug', ext:'aar')' to dependencies
-
           dependencies {
               implementation fileTree(dir: 'libs', include: ['*.jar'])
-              // TODO: The first compilation needs to disable the following line
-              //  Enable the following line after generate module library
-              implementation(name:'QtAndroidUtilsModule-debug', ext:'aar')
-          }
-
-         * add "dirs 'libs'" to repositories
-      
-          repositories {
-              google()
-              jcenter()
-              flatDir{
-                  dirs 'libs'
-              }
+              implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule')
           }
           
 ---

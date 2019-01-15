@@ -7,6 +7,7 @@ Autrhor: KangLin(kl222@126.com)
 <!-- toc -->
 
 - [Source directory](#Source-directory)
+- [Functions](#Functions)
 - [Build](#Build)
 - [Other application use the library](#Other-application-use-the-library)
 - [Contribute](#Contribute)
@@ -22,6 +23,16 @@ Autrhor: KangLin(kl222@126.com)
     |
     |-- daemon/          # The library daemon code
 
+
+---
+
+## Functions
+
+- Verify storage permissions
+- Vibrate
+- Screen wake
+- Android system directory
+- Message notifiction
 
 ---
 

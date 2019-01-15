@@ -30,6 +30,7 @@ public:
     static int CanCelAll();
     
 signals:
+    void OnChilk();
     
 public slots:
     

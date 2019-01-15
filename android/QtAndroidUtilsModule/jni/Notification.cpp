@@ -33,7 +33,7 @@ int CNotification::Show(const QString &szText, const QString &szTitle,
     CHECK_EXCEPTION();
     //*
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/MessageNotification",
+            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "notify",
             "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;II)V",
             active.object<jobject>(),
@@ -98,7 +98,7 @@ int CNotification::Show(const QString &szText,
     CHECK_EXCEPTION();
     
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/MessageNotification",
+            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "notify",
             "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILjava/lang/String;Ljava/lang/String;)V",
             active.object<jobject>(),
@@ -193,7 +193,7 @@ int CNotification::Show(const QString &szText,
     QAndroidJniObject objSmallIcon = BitmapFromQImage(smallIcon);
     QAndroidJniObject objLargeIcon = BitmapFromQImage(largeIcon);
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/MessageNotification",
+            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "notify",
             "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILandroid/graphics/Bitmap;Landroid/graphics/Bitmap;)V",
             active.object<jobject>(),
@@ -214,7 +214,7 @@ int CNotification::Cancel()
     QAndroidJniObject active = QtAndroid::androidActivity();
     CHECK_EXCEPTION();
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/MessageNotification",
+            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "cancel",
             "(Landroid/content/Context;I)V",
             active.object<jobject>(),
@@ -230,7 +230,7 @@ int CNotification::CanCelAll()
     QAndroidJniObject active = QtAndroid::androidActivity();
     CHECK_EXCEPTION();
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/MessageNotification",
+            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "cancelAll",
             "(Landroid/content/Context;)V",
             active.object<jobject>());

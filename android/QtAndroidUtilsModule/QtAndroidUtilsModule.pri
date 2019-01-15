@@ -6,7 +6,7 @@ OTHER_FILES += \
     $$PWD/build.gradle
 
 DISTFILES += \
-    $$PWD/src/org/KangLinStudio/* \
+    $$PWD/src/org/KangLinStudio/QtAndroidUtils/* \
     $$PWD/res/drawable-hdpi/* \
     $$PWD/res/drawable-ldpi/* \
     $$PWD/res/drawable-mdpi/* \

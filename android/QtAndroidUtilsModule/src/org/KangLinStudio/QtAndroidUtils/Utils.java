@@ -2,7 +2,7 @@
  * Author: KangLin(kl222@!26.com) 
  */
 
-package org.KangLinStudio;
+package org.KangLinStudio.QtAndroidUtils;
 
 import android.Manifest;
 import android.app.Activity;

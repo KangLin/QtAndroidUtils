@@ -1,4 +1,4 @@
-package org.KangLinStudio;
+package org.KangLinStudio.QtAndroidUtils;
 
 import android.util.Log;
 import java.util.Timer;

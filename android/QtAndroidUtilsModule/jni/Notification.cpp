@@ -4,6 +4,7 @@
 #include <QtAndroid>
 #include <QDebug>
 #include <android/bitmap.h>
+#include "NotificationNative.h"
 
 #define CHECK_EXCEPTION() \
     if(env->ExceptionCheck())\
@@ -16,10 +17,18 @@ CNotification::CNotification(QObject *parent) : QObject(parent)
 {
     static int id = 0;
     m_nID = id++;
+    
+    bool check = connect(CNotificationNative::instant(),
+                         SIGNAL(sigMessageNotificationOnClickCallBack(int)),
+                         this,
+                         SLOT(slotOnClick(int)));
+    Q_ASSERT(check);
 }
 
-int CNotification::Show(const QString &szText, const QString &szTitle,
-                        int nNum)
+int CNotification::Show(const QString &szText,
+                        const QString &szTitle,
+                        int nNum,
+                        bool bCallBack)
 {
     int nRet = 0;
     
@@ -35,12 +44,13 @@ int CNotification::Show(const QString &szText, const QString &szTitle,
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "notify",
-            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;II)V",
+            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IIZ)V",
             active.object<jobject>(),
             objText.object<jstring>(),
             objTitle.object<jstring>(),
             nNum,
-            m_nID
+            m_nID,
+            bCallBack
             );
     CHECK_EXCEPTION();//*/
     
@@ -81,7 +91,8 @@ int CNotification::Show(const QString &szText,
                         const QString &szTitle,
                         int nNum,
                         const QString &szSmallIcon,
-                        const QString &szLargeIcon)
+                        const QString &szLargeIcon,
+                        bool bCallBack)
 {
     int nRet = 0;
     QAndroidJniEnvironment env;
@@ -100,14 +111,15 @@ int CNotification::Show(const QString &szText,
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "notify",
-            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILjava/lang/String;Ljava/lang/String;)V",
+            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILjava/lang/String;Ljava/lang/String;Z)V",
             active.object<jobject>(),
             objText.object<jstring>(),
             objTitle.object<jstring>(),
             nNum,
             m_nID,
             objSmallIcon.object<jstring>(),
-            objLargeIcon.object<jstring>()
+            objLargeIcon.object<jstring>(),
+            bCallBack
             );
     CHECK_EXCEPTION();
     return nRet;
@@ -179,7 +191,8 @@ int CNotification::Show(const QString &szText,
                         const QString &szTitle,
                         int nNum,
                         const QImage &smallIcon,
-                        const QImage &largeIcon)
+                        const QImage &largeIcon,
+                        bool bCallBack)
 {
     int nRet = 0;
     QAndroidJniEnvironment env;
@@ -195,14 +208,15 @@ int CNotification::Show(const QString &szText,
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "notify",
-            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILandroid/graphics/Bitmap;Landroid/graphics/Bitmap;)V",
+            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILandroid/graphics/Bitmap;Landroid/graphics/Bitmap;Z)V",
             active.object<jobject>(),
             objText.object<jstring>(),
             objTitle.object<jstring>(),
             nNum,
             m_nID,
             objSmallIcon.object<jobject>(),
-            objLargeIcon.object<jobject>()
+            objLargeIcon.object<jobject>(),
+            bCallBack
             );
     return nRet;
 }
@@ -236,4 +250,16 @@ int CNotification::CanCelAll()
             active.object<jobject>());
     CHECK_EXCEPTION();
     return nRet;
+}
+
+void CNotification::slotOnClick(int id)
+{
+    if(m_nID != id)
+        return;
+    OnClick();
+    emit sigOnChilk();
+}
+
+void CNotification::OnClick()
+{
 }

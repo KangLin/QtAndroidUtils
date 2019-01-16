@@ -24,8 +24,11 @@ MainWindow::MainWindow(QWidget *parent) :
                  SLOT(slotApplicationStateChanged(Qt::ApplicationState))
                 );
     Q_ASSERT(check);
+    check = connect(&m_Notify, SIGNAL(sigOnChilk()),
+                    this, SLOT(slotNotifyOnClick()));
+    Q_ASSERT(check);
 #ifdef BUILD_TEST
-    CTest::TestTimeout();
+    //CTest::TestTimeout();
 #endif
 }
 
@@ -72,7 +75,9 @@ void MainWindow::on_pbNotification_clicked()
     text += QString::number(n++);
     //CNotification m_Notify;
     m_Notify.Show(text, "Title", 10,
-                  QImage(":/icon/app"), QImage(":/icon/app"));
+                  QImage(":/icon/app"),
+                  QImage(":/icon/app"),
+                  true);
 }
 
 void MainWindow::on_pbCancelNotify_clicked()
@@ -83,5 +88,11 @@ void MainWindow::on_pbCancelNotify_clicked()
 void MainWindow::slotApplicationStateChanged(Qt::ApplicationState state)
 {
     qDebug() << "State: " << state;
-    
+}
+
+void MainWindow::slotNotifyOnClick()
+{
+    qDebug() << "slotNotifyOnClick";
+    //showMaximized();
+    //activateWindow();
 }

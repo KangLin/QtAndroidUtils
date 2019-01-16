@@ -6,6 +6,10 @@
 #include <QObject>
 #include <QImage>
 
+/*
+ * The following permission must be set in AndroidManifest.xml:
+ * <activity android:launchMode="singleInstance" />
+ */
 class CNotification : public QObject
 {
     Q_OBJECT
@@ -14,26 +18,33 @@ public:
     
     int Show(const QString &szText,
              const QString &szTitle = QString(),
-             int nNum = 0);
+             int nNum = 0,
+             bool bCallBack = false);
     int Show(const QString &szText,
              const QString &szTitle,
              int nNum,
              const QString &szSmallIcon,
-             const QString &szLargeIcon = QString());
+             const QString &szLargeIcon = QString(),
+             bool bCallBack = false);
     int Show(const QString &szText,
              const QString &szTitle,
              int nNum,
              const QImage &smallIcon,
-             const QImage &largeIcon = QImage());
+             const QImage &largeIcon = QImage(),
+             bool bCallBack = false);
     
     int Cancel();
     static int CanCelAll();
     
 signals:
-    void OnChilk();
+    void sigOnChilk();
     
 public slots:
-    
+    void slotOnClick(int id);
+
+protected:
+    virtual void OnClick();
+
 private:
     int m_nID;
 };

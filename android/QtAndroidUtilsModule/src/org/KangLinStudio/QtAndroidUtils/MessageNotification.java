@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
@@ -26,8 +28,84 @@ public class MessageNotification {
     /**
      * The unique identifier for this type of notification.
      */
-    private static final String NOTIFICATION_TAG = "Message";
-    private final static String ACTION_ON_CHICK = "org.KangLinStudio.QtAndroidUtils.OnClick";
+    private static final String TAG = "MessageNotification";
+    private static final String ACTION_ON_CHICK = "org.KangLinStudio.QtAndroidUtils.MessageNotification.OnClick";
+    
+    private static BroadcastReceiver m_Receiver = null;
+    private static native void MessageNotificationOnClickCallBack(int id);
+    private class MessageNotificationBroadcastReceiver extends BroadcastReceiver{
+        
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(!action.equals(ACTION_ON_CHICK)) return;
+            int id = intent.getIntExtra("id", -1);
+            if(-1 == id) {
+                Log.e(TAG, "Get int Extra fail");
+                return;
+            }
+            
+            /* Start QtActivity
+             * The following permission must be set in AndroidManifest.xml:
+             * <activity android:launchMode="singleInstance" />
+             */
+            Intent intentActivity = new Intent(context, context.getClass());
+            context.startActivity(intentActivity);
+            
+            // Call back native function
+            MessageNotificationOnClickCallBack(id);
+        }
+    }
+
+    private void init(final Context context){
+        m_Receiver = new MessageNotificationBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_ON_CHICK);
+        context.registerReceiver(m_Receiver, intentFilter);
+    }
+
+    /**
+     * Shows the notification, or updates a previously shown notification of
+     * this type, with the given parameters.
+     * <p>
+     * TODO: Customize this method's arguments to present relevant content in
+     * the notification.
+     * <p>
+     * TODO: Customize the contents of this method to tweak the behavior and
+     * presentation of message notifications. Make
+     * sure to follow the
+     * <a href="https://developer.android.com/design/patterns/notifications.html">
+     * Notification design guidelines</a> when doing so.
+     *
+     * @see #cancel(Context)
+     */
+    public static void notify(final Context context,
+                              final String text,
+                              final String title,
+                              final int number,
+                              final int id,
+                              final Icon smallIcon,
+                              final Bitmap largeIcon,
+                              final boolean callBack) {
+        PendingIntent pi;
+        if(callBack)
+        {
+            Intent i = new Intent(ACTION_ON_CHICK);
+            i.putExtra("id", id);
+            pi = PendingIntent.getBroadcast (
+                                  context,
+                                  0,
+                                  i,
+                                  PendingIntent.FLAG_UPDATE_CURRENT);
+        } else {
+            pi = PendingIntent.getActivity(
+                                  context,
+                                  0,
+                                  new Intent(context, context.getClass()),
+                                  PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        notify(context, text, title, number, id, smallIcon, largeIcon, pi);
+    }
     
     /**
      * Shows the notification, or updates a previously shown notification of
@@ -50,7 +128,8 @@ public class MessageNotification {
                               final int number,
                               final int id,
                               final Icon smallIcon,
-                              final Bitmap largeIcon
+                              final Bitmap largeIcon,
+                              final PendingIntent pi
                               ) 
     {
         final Notification.Builder builder = new Notification.Builder(context)
@@ -96,19 +175,13 @@ public class MessageNotification {
                 
         // Set the pending intent to be initiated when the user touches
         // the notification.         
-        builder.setContentIntent(
-            PendingIntent.getActivity(
-                context,
-                0,
-                new Intent(context, context.getClass()),
-                PendingIntent.FLAG_UPDATE_CURRENT)
-                );
+        builder.setContentIntent(pi);
         if(null == largeIcon)
-            Log.d(NOTIFICATION_TAG, "largeIcon is null");
+            Log.d(TAG, "largeIcon is null");
         else
             builder.setLargeIcon(largeIcon);
         if(null == smallIcon)
-            Log.e(NOTIFICATION_TAG, "SmallIcon is null, must set setSmallIcon");
+            Log.e(TAG, "SmallIcon is null, must set setSmallIcon");
         else
             builder.setSmallIcon(smallIcon);
         notify(context, builder.build(), id);            
@@ -120,12 +193,12 @@ public class MessageNotification {
                               final int number,
                               final int id,
                               final Bitmap smallIcon,
-                              final Bitmap largeIcon
-                              ) {
+                              final Bitmap largeIcon,
+                              final boolean callBack) {
         Icon icon = null;
         if(null != smallIcon)
             icon = Icon.createWithBitmap(smallIcon);
-        notify(context, text, title, number, id, icon, largeIcon);
+        notify(context, text, title, number, id, icon, largeIcon, callBack);
     }
 
     /*
@@ -135,12 +208,13 @@ public class MessageNotification {
                               final String text,
                               final String title,
                               final int number,
-                              final int id) {
+                              final int id,
+                              final boolean callBack) {
         final Resources res = context.getResources();
         final Bitmap largeIcon;
         largeIcon = BitmapFactory.decodeResource(res, R.drawable.icon);
         final Icon smallIcon = Icon.createWithResource(context, R.drawable.icon);
-        notify(context, text, title, number, id, smallIcon, largeIcon);
+        notify(context, text, title, number, id, smallIcon, largeIcon, callBack);
     }
 
     public static void notify(final Context context,
@@ -149,11 +223,12 @@ public class MessageNotification {
                               final int number,
                               final int id,
                               final String smallIconFile,
-                              final String largeIconFile) {
+                              final String largeIconFile,
+                              final boolean callBack) {
         final Bitmap largeIcon;
         largeIcon = BitmapFactory.decodeFile(smallIconFile);
         final Icon smallIcon = Icon.createWithFilePath(smallIconFile);
-        notify(context, text, title, number, id, smallIcon, largeIcon);
+        notify(context, text, title, number, id, smallIcon, largeIcon, callBack);
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
@@ -163,7 +238,7 @@ public class MessageNotification {
         final NotificationManager nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            nm.notify(NOTIFICATION_TAG, id, notification);
+            nm.notify(TAG, id, notification);
         } else {
             nm.notify(id, notification);
         }
@@ -178,7 +253,7 @@ public class MessageNotification {
         final NotificationManager nm = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            nm.cancel(NOTIFICATION_TAG, id);
+            nm.cancel(TAG, id);
         } else {
             nm.cancel(id);
         }

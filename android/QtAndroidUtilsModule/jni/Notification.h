@@ -15,6 +15,7 @@ class CNotification : public QObject
     Q_OBJECT
 public:
     explicit CNotification(QObject *parent = nullptr);
+    virtual ~CNotification();
     
     int Show(const QString &szText,
              const QString &szTitle = QString(),

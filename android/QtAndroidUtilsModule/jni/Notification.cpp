@@ -25,6 +25,11 @@ CNotification::CNotification(QObject *parent) : QObject(parent)
     Q_ASSERT(check);
 }
 
+CNotification::~CNotification()
+{
+    Cancel();
+}
+
 int CNotification::Show(const QString &szText,
                         const QString &szTitle,
                         int nNum,

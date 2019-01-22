@@ -1,12 +1,7 @@
 
-versionAtMost(QT_VERSION, 5.3.0) {
-    error("Android: Qt version must greater than or equal to 5.3.0")
-}
-else {
-    QT += androidextras
-}
+versionAtMost(QT_VERSION, 5.4.0) : error("Android: Qt version must greater than or equal to 5.4.0")
 
-QT += gui
+QT += androidextras gui
 
 INCLUDEPATH += $$PWD
 LIBS += -ljnigraphics

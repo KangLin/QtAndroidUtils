@@ -131,7 +131,7 @@ Doxygen/
 Doxyfile
 android/local.properties
 android/gradlew.*
-
+android/gradle.properties
 
 # Compiled Object files
 *.slo

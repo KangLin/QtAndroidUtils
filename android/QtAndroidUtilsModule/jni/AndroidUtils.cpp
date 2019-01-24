@@ -222,24 +222,44 @@ QString CAndroidUtils::GetAppPackageName()
     return QtAndroid::androidActivity().callObjectMethod<jstring>("getPackageName").toString();
 }
 
-void CAndroidUtils::Share(const QString &title, const QString &subject,
-                          const QString &content)
+void CAndroidUtils::Share(const QString &title,
+                          const QString &subject,
+                          const QString &content,
+                          const QString &htmlContext,
+                          const QStringList &imageFiles)
 {
     QAndroidJniEnvironment env;
     QAndroidJniObject jTitle = QAndroidJniObject::fromString(title);
     QAndroidJniObject jSubject = QAndroidJniObject::fromString(subject);
     QAndroidJniObject jContent = QAndroidJniObject::fromString(content);
+    QAndroidJniObject jHtmlContext = QAndroidJniObject::fromString(htmlContext);
+    
+    //See: https://blog.csdn.net/ljeagle/article/details/6697360)
+    int size = imageFiles.size();
+    jclass js = env.findClass("java/lang/String");
+    jobjectArray joaImgFiles = env->NewObjectArray(size, js, NULL);
+    if(NULL == joaImgFiles)
+        return;
+    for(int i = 0; i < size; i++)
+    {
+        QAndroidJniObject s = QAndroidJniObject::fromString(imageFiles.at(i));
+        env->SetObjectArrayElement(joaImgFiles, i, s.object<jstring>());
+    }
+    
     QAndroidJniObject activity = QtAndroid::androidActivity();
     QAndroidJniObject::callStaticMethod<void>(
         "org/KangLinStudio/QtAndroidUtils/Utils",
-        "shareText",
-        "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+        "share",
+        "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V",
         activity.object<jobject>(),
         jTitle.object<jstring>(),
         jSubject.object<jstring>(),
-        jContent.object<jstring>()
+        jContent.object<jstring>(),
+        jHtmlContext.object<jstring>(),
+        joaImgFiles
    );
-   CHECK_EXCEPTION();
+   CHECK_EXCEPTION(); 
+   env->DeleteLocalRef(joaImgFiles);
 }
 
 void CAndroidUtils::OpenCamera()

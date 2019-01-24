@@ -53,7 +53,9 @@ public:
      */
     static void Share(const QString &title,
                       const QString &subject,
-                      const QString &content);
+                      const QString &content,
+                      const QString &htmlContext = QString(),
+                      const QStringList &imageFiles = QStringList());
  
     
     static QString GetAppClassName();

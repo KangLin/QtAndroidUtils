@@ -132,6 +132,7 @@ Doxyfile
 android/local.properties
 android/gradlew.*
 android/gradle.properties
+*.iml
 
 # Compiled Object files
 *.slo
@@ -195,3 +196,9 @@ _CPack_Packages/
 #packages
 *.tar.gz
 *.zip
+
+android/.gradle/
+android/.idea/
+android/android.iml
+android/gradle/
+android/gradlew

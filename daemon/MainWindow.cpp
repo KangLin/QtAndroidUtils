@@ -117,4 +117,5 @@ void MainWindow::on_pbPhoto_clicked()
 void MainWindow::slotSelectPhoto(QStringList path)
 {
     qDebug() << "select photos: " << path;
+    m_AndroidUtils.Share("titie", "subject", "content", "<html>share html content...</html>", path);
 }

@@ -33,6 +33,8 @@ Autrhor: KangLin(kl222@126.com)
 - Screen wake
 - Android system directory
 - Message notifiction
+- Call system album and camera
+- Share
 
 ---
 

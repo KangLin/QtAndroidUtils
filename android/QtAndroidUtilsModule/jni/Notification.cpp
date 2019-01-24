@@ -166,13 +166,11 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
    
     AndroidBitmapInfo info;
     if (AndroidBitmap_getInfo(env, bitmap.object<jobject>(), &info) < 0) {
-        env->DeleteLocalRef(bitmap.object<jobject>());
         return nullptr;
     }
 
     void *pixels;
     if (AndroidBitmap_lockPixels(env, bitmap.object<jobject>(), &pixels) < 0) {
-        env->DeleteLocalRef(bitmap.object<jobject>());
         return nullptr;
     }
 

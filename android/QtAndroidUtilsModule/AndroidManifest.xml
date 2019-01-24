@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.KangLinStudio.QtAndroidUtils" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="1" android:installLocation="auto">
-    <uses-sdk android:minSdkVersion="16"/>
-    <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.KangLinStudio.QtAndroidUtils"
+    android:installLocation="auto"
+    android:versionCode="1"
+    android:versionName="1.0">
 
-    <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
-         Remove the comment if you do not require these default permissions. -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-sdk android:minSdkVersion="16" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-	<uses-permission android:name="android.permission.CAMERA" />
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+    <!--
+    The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
+         Remove the comment if you do not require these default permissions.
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application android:allowBackup="true" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".ShareActivity" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:screenOrientation="unspecified" android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
+                <data android:mimeType="audio/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
+                <data android:mimeType="audio/*" />
+            </intent-filter>
+        </activity>
+    </application>
+
 </manifest>

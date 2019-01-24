@@ -19,6 +19,7 @@ void CActivityResultReceiver::handleActivityResult(int receiverRequestCode, int 
     
     switch (receiverRequestCode) {
     case RESULT_CODE_PHOTO:
+    case RESULT_CODE_CAMERA:
     {
         if(!data.isValid())
             break;

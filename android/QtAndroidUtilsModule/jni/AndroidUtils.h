@@ -59,6 +59,7 @@ public:
     static QString GetAppClassName();
     static QString GetAppPackageName();
     
+    void OpenCamera();
     /**
      * @brief Open android system album
      * @param num: Enable max select number

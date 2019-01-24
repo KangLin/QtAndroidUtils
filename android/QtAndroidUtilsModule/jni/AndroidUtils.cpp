@@ -242,6 +242,34 @@ void CAndroidUtils::Share(const QString &title, const QString &subject,
    CHECK_EXCEPTION();
 }
 
+void CAndroidUtils::OpenCamera()
+{
+    QAndroidJniEnvironment env;
+    QAndroidJniObject activity = QtAndroid::androidActivity();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))   
+    //https://github.com/DmcSDK/MediaPickerPoject
+    QAndroidIntent intent(activity, "com.dmcbig.mediapicker.TakePhotoActivity");
+    CHECK_EXCEPTION();
+    QtAndroid::startActivity(intent.handle(),
+                             CActivityResultReceiver::RESULT_CODE_CAMERA,
+                             m_pResultReceiver);
+    CHECK_EXCEPTION();
+#else
+    
+    jclass clsTakePhotoActivity =
+            env.findClass("com/dmcbig/mediapicker/TakePhotoActivity");
+    QAndroidJniObject intent("android.content.Intent",
+                             "(Landroid/content/Context;Ljava/lang/Class;)V",
+                             activity.object<jobject>(),
+                             clsTakePhotoActivity);
+    CHECK_EXCEPTION();
+    QtAndroid::startActivity(intent,
+                             CActivityResultReceiver::RESULT_CODE_CAMERA,
+                             m_pResultReceiver);
+    CHECK_EXCEPTION();
+#endif   
+}
+
 void CAndroidUtils::OpenAlbum(int maxSelect)
 {
     QAndroidJniEnvironment env;

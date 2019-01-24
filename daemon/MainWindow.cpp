@@ -106,7 +106,7 @@ void MainWindow::on_pbShare_clicked()
 
 void MainWindow::on_pbCamera_clicked()
 {
-    
+    m_AndroidUtils.OpenCamera();
 }
 
 void MainWindow::on_pbPhoto_clicked()

@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
     check = connect(&m_Notify, SIGNAL(sigOnChilk()),
                     this, SLOT(slotNotifyOnClick()));
     Q_ASSERT(check);
+    check = connect(&m_AndroidUtils, SIGNAL(sigSelectPhotos(QStringList)),
+                    this, SLOT(slotSelectPhoto(QStringList)));
 #ifdef BUILD_TEST
     //CTest::TestTimeout();
 #endif
@@ -95,4 +97,24 @@ void MainWindow::slotNotifyOnClick()
     qDebug() << "slotNotifyOnClick";
     //showMaximized();
     //activateWindow();
+}
+
+void MainWindow::on_pbShare_clicked()
+{
+    CAndroidUtils::Share("Daemon", "subject", "<html>share content...</html>");
+}
+
+void MainWindow::on_pbCamera_clicked()
+{
+    
+}
+
+void MainWindow::on_pbPhoto_clicked()
+{
+    m_AndroidUtils.OpenAlbum();
+}
+
+void MainWindow::slotSelectPhoto(QStringList path)
+{
+    qDebug() << "select photos: " << path;
 }

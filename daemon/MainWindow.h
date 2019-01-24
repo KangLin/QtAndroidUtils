@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "Notification.h"
+#include "AndroidUtils.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,9 +22,14 @@ private slots:
     void on_pbScreenWake_clicked();
     void on_pbNotification_clicked();
     void on_pbCancelNotify_clicked();
+    void on_pbShare_clicked();
+    void on_pbCamera_clicked();
+    void on_pbPhoto_clicked();
 
     void slotApplicationStateChanged(Qt::ApplicationState state);
     void slotNotifyOnClick();
+
+    void slotSelectPhoto(QStringList path);
     
 private:
     int ShowDirectory();
@@ -31,6 +37,7 @@ private:
 private:
     Ui::MainWindow *ui;
     CNotification m_Notify;
+    CAndroidUtils m_AndroidUtils;
 };
 
 #endif // MAINWINDOW_H

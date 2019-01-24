@@ -10,4 +10,4 @@ DISTFILES += \
     $$PWD/res/drawable-hdpi/* \
     $$PWD/res/drawable-ldpi/* \
     $$PWD/res/drawable-mdpi/* \
-    $$PWD/res/drawable-nodpi/* 
+    $$PWD/res/drawable-nodpi/*

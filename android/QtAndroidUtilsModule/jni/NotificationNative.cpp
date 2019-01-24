@@ -1,3 +1,5 @@
+// Author: KangLin(kl222@!26.com) 
+
 #include "NotificationNative.h"
 
 #include <QDebug>

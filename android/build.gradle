@@ -9,12 +9,14 @@ buildscript {
     }
 }
 
-repositories {
-    google()
-    jcenter()
-    /*flatDir{
-        dirs 'libs'
-    }*/
+allprojects{
+    repositories {
+        google()
+        jcenter()
+        /*flatDir{
+            dirs 'libs'
+        }*/
+    }
 }
 
 apply plugin: 'com.android.application'
@@ -47,7 +49,7 @@ android {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
             aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
-            res.srcDirs = [qt5AndroidDir + '/res', 'module/res', 'res']
+            res.srcDirs = [qt5AndroidDir + '/res', 'res']
             resources.srcDirs = ['src']
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']

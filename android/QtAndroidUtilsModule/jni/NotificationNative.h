@@ -2,6 +2,8 @@
  * THIS IS PRIVATE CLASS， YOU CAN NOT USE IT.
  */
 
+// Author: KangLin(kl222@!26.com) 
+
 #ifndef CNOTIFICATIONNATIVE_H
 #define CNOTIFICATIONNATIVE_H
 

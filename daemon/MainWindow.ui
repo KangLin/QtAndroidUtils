@@ -16,9 +16,6 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QTextEdit" name="teDirectory"/>
-    </item>
-    <item row="0" column="1">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QPushButton" name="pbNotification">
@@ -35,6 +32,27 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pbCamera">
+        <property name="text">
+         <string>Camera</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbPhoto">
+        <property name="text">
+         <string>Photo</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbShare">
+        <property name="text">
+         <string>Share</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pbVibrate">
         <property name="text">
          <string>Vibrate</string>
@@ -47,6 +65,16 @@
          <string>ScreenWake</string>
         </property>
        </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QTextEdit" name="teDirectory"/>
+      </item>
+      <item>
+       <widget class="QWidget" name="wdtPicture" native="true"/>
       </item>
      </layout>
     </item>

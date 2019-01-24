@@ -6,6 +6,8 @@
 #include <QtAndroid>
 #include <QAndroidJniExceptionCleaner>
 #include <QtAndroidExtras>
+#include "ActivityResultReceiver.h"
+#include <QAndroidIntent>
 
 #define CHECK_EXCEPTION() \
     if(env->ExceptionCheck())\
@@ -14,12 +16,17 @@
     env->ExceptionClear(); \
     }
 
+
 CAndroidUtils::CAndroidUtils(QObject *parent) :  QObject(parent)
 {
+    m_pResultReceiver = new CActivityResultReceiver(this);
+    
 }
 
 CAndroidUtils::~CAndroidUtils()
 {
+    if(m_pResultReceiver)
+        delete m_pResultReceiver;
 }
 
 int CAndroidUtils::InitPermissions()
@@ -29,7 +36,14 @@ int CAndroidUtils::InitPermissions()
     if(inited)
         return 0;
     inited = true;
+    nRet = InitExternalStoragePermissions();
+    nRet = InitCameraPermissions();
+    return nRet;
+}
 
+int CAndroidUtils::InitExternalStoragePermissions()
+{
+    int nRet = 0;
     QAndroidJniEnvironment env;
     
     /*
@@ -75,6 +89,51 @@ int CAndroidUtils::InitPermissions()
     }
 #endif
 
+    return nRet;
+}
+
+int CAndroidUtils::InitCameraPermissions()
+{
+    int nRet = 0;
+    QAndroidJniEnvironment env;
+    
+    /*
+     The following permission must be set in AndroidManifest.xml:
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    */
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    QStringList lstPermission;
+    QtAndroid::PermissionResult r;
+    r = QtAndroid::checkPermission("android.permission.CAMERA");
+    if(QtAndroid::PermissionResult::Denied == r)
+    {
+        lstPermission << "android.permission.CAMERA";
+    }
+    if(!lstPermission.isEmpty())
+        QtAndroid::requestPermissionsSync(lstPermission);
+#else
+    
+    /* Checks if the app has permission to read and write to device storage
+     * If the app does not has permission then the user will be prompted to
+     * grant permissions, When android > 6.0(SDK API > 23)
+     */
+    QAndroidJniObject mainActive = QtAndroid::androidActivity();
+    CHECK_EXCEPTION();
+    if(mainActive.isValid())
+    {
+        QAndroidJniObject::callStaticMethod<void>(
+                "org/KangLinStudio/QtAndroidUtils/Utils",
+                "verifyCameraPermissions",
+                "(Landroid/app/Activity;)V",
+                mainActive.object<jobject>());
+        CHECK_EXCEPTION();
+    }
+    else
+    {
+        qDebug() << "QtAndroid::androidActivity() isn't valid\n";
+    }
+#endif
     return nRet;
 }
 
@@ -161,4 +220,84 @@ QString CAndroidUtils::GetAppClassName()
 QString CAndroidUtils::GetAppPackageName()
 {
     return QtAndroid::androidActivity().callObjectMethod<jstring>("getPackageName").toString();
+}
+
+void CAndroidUtils::Share(const QString &title, const QString &subject,
+                          const QString &content)
+{
+    QAndroidJniEnvironment env;
+    QAndroidJniObject jTitle = QAndroidJniObject::fromString(title);
+    QAndroidJniObject jSubject = QAndroidJniObject::fromString(subject);
+    QAndroidJniObject jContent = QAndroidJniObject::fromString(content);
+    QAndroidJniObject activity = QtAndroid::androidActivity();
+    QAndroidJniObject::callStaticMethod<void>(
+        "org/KangLinStudio/QtAndroidUtils/Utils",
+        "shareText",
+        "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+        activity.object<jobject>(),
+        jTitle.object<jstring>(),
+        jSubject.object<jstring>(),
+        jContent.object<jstring>()
+   );
+   CHECK_EXCEPTION();
+}
+
+void CAndroidUtils::OpenAlbum(int maxSelect)
+{
+    QAndroidJniEnvironment env;
+    QAndroidJniObject activity = QtAndroid::androidActivity();
+    QAndroidJniObject maxSelectCount = 
+            QAndroidJniObject::getStaticObjectField<jstring>(
+                "com.dmcbig.mediapicker.PickerConfig",
+                "MAX_SELECT_COUNT");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))   
+    //https://github.com/DmcSDK/MediaPickerPoject
+    QAndroidIntent intent(activity, "com.dmcbig.mediapicker.PickerActivity");
+    //intent.putExtra(maxSelectCount.toString(), QVariant(maxSelect));
+    intent.handle().callObjectMethod("putExtra",
+                            "(Ljava/lang/String;I)Landroid/content/Intent;",
+                            maxSelectCount.object<jstring>(),
+                            maxSelect);
+    CHECK_EXCEPTION();
+    QtAndroid::startActivity(intent.handle(),
+                             CActivityResultReceiver::RESULT_CODE_PHOTO,
+                             m_pResultReceiver);
+    CHECK_EXCEPTION();
+#else
+    
+    jclass clsPickerActivity = env.findClass("com/dmcbig/mediapicker/PickerActivity");
+    QAndroidJniObject intent("android.content.Intent",
+                             "(Landroid/content/Context;Ljava/lang/Class;)V",
+                             activity.object<jobject>(),
+                             clsPickerActivity);
+    CHECK_EXCEPTION();//*/
+    /*
+    QAndroidJniObject objPA = 
+        QAndroidJniObject::fromString("com.dmcbig.mediapicker.PickerActivity");
+    QAndroidJniObject objPickerActivity = 
+        QAndroidJniObject::callStaticObjectMethod(
+                "java/lang/Class",
+                "forName",
+                "(Ljava/lang/String;)Ljava/lang/Class;",
+                objPA.object<jstring>());
+    CHECK_EXCEPTION();
+    QAndroidJniObject intent("android.content.Intent",
+                             "(Landroid/content/Context;Ljava/lang/Class;)V",
+                             activity.object<jobject>(),
+                             objPickerActivity.object<jclass>());
+    CHECK_EXCEPTION();//*/
+    intent.callObjectMethod("putExtra",
+                            "(Ljava/lang/String;I)Landroid/content/Intent;",
+                            maxSelectCount.object<jstring>(),
+                            maxSelect);
+    QtAndroid::startActivity(intent,
+                             CActivityResultReceiver::RESULT_CODE_PHOTO,
+                             m_pResultReceiver);
+    CHECK_EXCEPTION();
+#endif   
+}
+
+void CAndroidUtils::SelectPhotos(QStringList path)
+{
+    emit sigSelectPhotos(path);
 }

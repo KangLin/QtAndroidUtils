@@ -7,6 +7,7 @@
 
 #include <QObject>
 
+class CActivityResultReceiver;
 class Q_CORE_EXPORT CAndroidUtils : public QObject
 {
     Q_OBJECT
@@ -14,13 +15,21 @@ class Q_CORE_EXPORT CAndroidUtils : public QObject
 public:
     CAndroidUtils(QObject *parent = nullptr);
     virtual ~CAndroidUtils();
-    
+
+    static int InitPermissions();
+
     /*
      The following permission must be set in AndroidManifest.xml:
      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     */
-    static int InitPermissions();
+    static int InitExternalStoragePermissions();
+    /*
+     The following permission must be set in AndroidManifest.xml:
+     <uses-permission android:name="android.permission.CAMERA" />
+    */
+    static int InitCameraPermissions();
+
     /*
       The following permission must be set in AndroidManifest.xml:
       <uses-permission android:name="android.permission.VIBRATE"/>
@@ -36,8 +45,33 @@ public:
      */
     static bool ScreenWake(bool bWake = true);
     
+    /**
+     * @brief Share 
+     * @param title
+     * @param subject
+     * @param content
+     */
+    static void Share(const QString &title,
+                      const QString &subject,
+                      const QString &content);
+ 
+    
     static QString GetAppClassName();
     static QString GetAppPackageName();
+    
+    /**
+     * @brief Open android system album
+     * @param num: Enable max select number
+     */
+    void OpenAlbum(int maxSelect = 40);
+signals:
+    void sigSelectPhotos(QStringList path);
+    
+    
+private:
+    friend CActivityResultReceiver;
+    CActivityResultReceiver* m_pResultReceiver;
+    void SelectPhotos(QStringList path);
 };
 
 #endif // JAVAUTIL_H

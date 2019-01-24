@@ -11,4 +11,3 @@ OTHER_FILES += \
     $$PWD/AndroidManifest.xml \
     $$PWD/build.gradle \
     $$PWD/settings.gradle
-

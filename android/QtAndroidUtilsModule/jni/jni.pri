@@ -10,15 +10,15 @@ SOURCES += \
     $$PWD/AndroidDirectory.cpp \
     $$PWD/AndroidUtils.cpp \
     $$PWD/Notification.cpp \
-    $$PWD/NotificationNative.cpp \
-    $$PWD/ActivityResultReceiver.cpp
+    $$PWD/ActivityResultReceiver.cpp \
+    $$PWD/NativeCallback.cpp
 
 HEADERS += \ 
     $$PWD/AndroidDirectory.h \
     $$PWD/AndroidUtils.h \
     $$PWD/Notification.h \
-    $$PWD/NotificationNative.h \
-    $$PWD/ActivityResultReceiver.h
+    $$PWD/ActivityResultReceiver.h \
+    $$PWD/NativeCallback.h
 
 equals(BUILD_TEST, 1){
     DEFINES += BUILD_TEST

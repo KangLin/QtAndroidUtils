@@ -12,7 +12,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 //import org.qtproject.qt5.android.bindings.QtActivity;

@@ -4,7 +4,7 @@
 #include <QtAndroid>
 #include <QDebug>
 #include <android/bitmap.h>
-#include "NotificationNative.h"
+#include "NativeCallback.h"
 
 #define CHECK_EXCEPTION() \
     if(env->ExceptionCheck())\
@@ -18,7 +18,7 @@ CNotification::CNotification(QObject *parent) : QObject(parent)
     static int id = 0;
     m_nID = id++;
     
-    bool check = connect(CNotificationNative::instant(),
+    bool check = connect(CNativeCallback::instant(),
                          SIGNAL(sigMessageNotificationOnClickCallBack(int)),
                          this,
                          SLOT(slotOnClick(int)));

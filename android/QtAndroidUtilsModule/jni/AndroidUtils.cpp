@@ -258,7 +258,8 @@ void CAndroidUtils::Share(const QString &title,
         jHtmlContext.object<jstring>(),
         joaImgFiles
    );
-   CHECK_EXCEPTION(); 
+   CHECK_EXCEPTION();
+
    env->DeleteLocalRef(joaImgFiles);
 }
 

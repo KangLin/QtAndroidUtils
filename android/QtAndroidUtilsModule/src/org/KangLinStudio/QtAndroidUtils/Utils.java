@@ -17,7 +17,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.content.Intent;
-import android.support.v4.content.FileProvider;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -95,9 +94,20 @@ public class Utils {
         Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         if(null == files || files.length == 0) {
             shareText(activity, title, subject, content, htmlContent);
+        } else if(files.length == 1) {
+            showOnePicture(activity, title, subject, content, htmlContent, files[0]);
         } else {
             sharePicture(activity, title, subject, content, htmlContent, files);
         }
+    }
+
+    private static void setShareIntent(Intent intent,
+                                       String subject,
+                                       String content,
+                                       String htmlContent){
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, content);
+        intent.putExtra(Intent.EXTRA_HTML_TEXT, htmlContent);
     }
 
     //https://blog.csdn.net/wqjsir/article/details/25538841
@@ -108,9 +118,22 @@ public class Utils {
                                  String htmlContent) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, content);
-        shareIntent.putExtra(Intent.EXTRA_HTML_TEXT, htmlContent);
+        setShareIntent(shareIntent, subject, content, htmlContent);
+        activity.startActivity(Intent.createChooser(shareIntent, title));
+    }
+
+    public static void showOnePicture(Activity activity,
+                                      String title,
+                                      String subject,
+                                      String content,
+                                      String htmlContent,
+                                      String file){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        setShareIntent(shareIntent, subject, content, htmlContent);
+        File f = new File(file);
+        Uri u = Uri.fromFile(f);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, u);
         activity.startActivity(Intent.createChooser(shareIntent, title));
     }
 
@@ -138,12 +161,10 @@ public class Utils {
             }
             imgUris.add(u);
         }
-        if(!imgUris.isEmpty())
+        if (!imgUris.isEmpty())
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imgUris);
 
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, content);
-        shareIntent.putExtra(Intent.EXTRA_HTML_TEXT, htmlContent);
+        setShareIntent(shareIntent, subject, content, htmlContent);
 
         activity.startActivity(Intent.createChooser(shareIntent, title));
     }
@@ -204,7 +225,6 @@ public class Utils {
     private static void showShareActivity(Context context, Intent intent) {
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(
                 intent, 0);
-
         if (!resInfo.isEmpty()) {
             for (ResolveInfo info : resInfo) {
                 ActivityInfo activityInfo = info.activityInfo;

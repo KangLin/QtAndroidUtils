@@ -119,7 +119,8 @@ public class Utils {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         setShareIntent(shareIntent, subject, content, htmlContent);
-        activity.startActivity(Intent.createChooser(shareIntent, title));
+        if(shareIntent.resolveActivity(activity.getPackageManager()) != null)
+            activity.startActivity(Intent.createChooser(shareIntent, title));
     }
 
     public static void showOnePicture(Activity activity,
@@ -134,7 +135,8 @@ public class Utils {
         File f = new File(file);
         Uri u = Uri.fromFile(f);
         shareIntent.putExtra(Intent.EXTRA_STREAM, u);
-        activity.startActivity(Intent.createChooser(shareIntent, title));
+        if(shareIntent.resolveActivity(activity.getPackageManager()) != null)
+            activity.startActivity(Intent.createChooser(shareIntent, title));
     }
 
     public static void sharePicture(Activity activity,
@@ -165,8 +167,8 @@ public class Utils {
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imgUris);
 
         setShareIntent(shareIntent, subject, content, htmlContent);
-
-        activity.startActivity(Intent.createChooser(shareIntent, title));
+        if(shareIntent.resolveActivity(activity.getPackageManager()) != null)
+            activity.startActivity(Intent.createChooser(shareIntent, title));
     }
 
     /**

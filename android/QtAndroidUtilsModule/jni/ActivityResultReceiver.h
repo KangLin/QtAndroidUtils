@@ -19,7 +19,8 @@ public:
     enum RESULT_CODE
     {
         RESULT_CODE_PHOTO,
-        RESULT_CODE_CAMERA
+        RESULT_CODE_CAMERA,
+        RESULT_CODE_PHONE
     };
     
 private:

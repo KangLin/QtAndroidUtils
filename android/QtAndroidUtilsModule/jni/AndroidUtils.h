@@ -30,6 +30,15 @@ public:
     */
     static int InitCameraPermissions();
 
+    /**
+     * @brief CallPhone: 
+     *  The following permission must be set in AndroidManifest.xml:
+     *  <uses-permission id="android.permission.CALL_PHONE" />  
+     * @param szNumber
+     * @return 
+     */
+    static int CallPhone(const QString szNumber = QString());
+    
     /*
       The following permission must be set in AndroidManifest.xml:
       <uses-permission android:name="android.permission.VIBRATE"/>

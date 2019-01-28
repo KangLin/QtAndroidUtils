@@ -137,6 +137,34 @@ int CAndroidUtils::InitCameraPermissions()
     return nRet;
 }
 
+int CAndroidUtils::CallPhone(const QString szNumber)
+{
+    int nRet = 0;
+    QAndroidJniEnvironment env;
+    QAndroidJniObject objDial = QAndroidJniObject::getStaticObjectField<jstring>(
+                "android/content/Intent",
+                "ACTION_DIAL");
+    CHECK_EXCEPTION();
+    
+    QString szPhone = "tel:" + szNumber;
+    QAndroidJniObject uri = QAndroidJniObject::callStaticObjectMethod(
+                "android/net/Uri",
+                "parse",
+                "(Ljava/lang/String;)Landroid/net/Uri;",
+                QAndroidJniObject::fromString(szPhone).object<jstring>());
+    CHECK_EXCEPTION();
+    QAndroidJniObject intent("android.content.Intent",
+                             "(Ljava/lang/String;Landroid/net/Uri;)V",
+                             objDial.object<jobject>(),
+                             uri.object<jobject>());
+    CHECK_EXCEPTION();
+    QtAndroid::startActivity(intent,
+                             CActivityResultReceiver::RESULT_CODE_PHONE
+                             );
+    CHECK_EXCEPTION();
+    return nRet;
+}
+
 /*
   The following permission must be set in AndroidManifest.xml:
   <uses-permission android:name="android.permission.VIBRATE"/>
@@ -214,7 +242,6 @@ QString CAndroidUtils::GetAppClassName()
                     "()Landroid/content/pm/ApplicationInfo;");
     
     return appInfo.getObjectField<jstring>("className").toString();
-        
 }
 
 QString CAndroidUtils::GetAppPackageName()

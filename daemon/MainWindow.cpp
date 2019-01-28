@@ -119,3 +119,8 @@ void MainWindow::slotSelectPhoto(QStringList path)
     qDebug() << "select photos: " << path;
     m_AndroidUtils.Share("titie", "subject", "content", "<html>share html content...</html>", path);
 }
+
+void MainWindow::on_ptPhone_clicked()
+{
+    CAndroidUtils::CallPhone("12345678901");
+}

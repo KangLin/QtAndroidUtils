@@ -31,6 +31,8 @@ private slots:
 
     void slotSelectPhoto(QStringList path);
     
+    void on_ptPhone_clicked();
+    
 private:
     int ShowDirectory();
     

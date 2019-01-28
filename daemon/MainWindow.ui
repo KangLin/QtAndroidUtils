@@ -53,6 +53,20 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="ptInstall">
+        <property name="text">
+         <string>Install apk</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="ptUnistall">
+        <property name="text">
+         <string>Uninstall</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pbShare">
         <property name="text">
          <string>Share</string>

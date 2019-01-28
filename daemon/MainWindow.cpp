@@ -4,6 +4,7 @@
 #include "AndroidUtils.h"
 #include "Notification.h"
 #include <QtDebug>
+#include <QFileDialog>
 #include <QApplication>
 
 #ifdef BUILD_TEST
@@ -123,4 +124,33 @@ void MainWindow::slotSelectPhoto(QStringList path)
 void MainWindow::on_ptPhone_clicked()
 {
     CAndroidUtils::CallPhone("12345678901");
+}
+
+void MainWindow::on_ptInstall_clicked()
+{
+    QString szFile;
+#ifdef Q_OS_ANDROID
+    // In Android, the file dialog is not shown maximized by the static
+    // function, which looks weird, since the dialog doesn't have borders or
+    // anything. To make sure it's shown maximized, we won't be using
+    // QFileDialog::getExistingDirectory().
+    QFileDialog dialog;
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(QFileDialog::ExistingFiles);
+    dialog.showMaximized();
+    dialog.exec();
+    if (!dialog.selectedFiles().isEmpty()) {
+        szFile = dialog.selectedFiles().front();
+    }
+#else
+    szFile = QFileDialog::getExistingDirectory(this,
+                                          QString(),
+                      ui->lineEditRootPath->text());
+#endif
+    CAndroidUtils::InstallApk(szFile);
+}
+
+void MainWindow::on_ptUnistall_clicked()
+{
+    CAndroidUtils::UninstallApk("org.KangLinStudio.QtAndroidUtils.daemon");
 }

@@ -141,7 +141,7 @@ int CAndroidUtils::CallPhone(const QString szNumber)
 {
     int nRet = 0;
     QAndroidJniEnvironment env;
-    QAndroidJniObject objDial = QAndroidJniObject::getStaticObjectField<jstring>(
+    QAndroidJniObject objAction = QAndroidJniObject::getStaticObjectField<jstring>(
                 "android/content/Intent",
                 "ACTION_DIAL");
     CHECK_EXCEPTION();
@@ -153,9 +153,9 @@ int CAndroidUtils::CallPhone(const QString szNumber)
                 "(Ljava/lang/String;)Landroid/net/Uri;",
                 QAndroidJniObject::fromString(szPhone).object<jstring>());
     CHECK_EXCEPTION();
-    QAndroidJniObject intent("android.content.Intent",
+    QAndroidJniObject intent("android/content/Intent",
                              "(Ljava/lang/String;Landroid/net/Uri;)V",
-                             objDial.object<jobject>(),
+                             objAction.object<jobject>(),
                              uri.object<jobject>());
     CHECK_EXCEPTION();
     QtAndroid::startActivity(intent,
@@ -235,6 +235,60 @@ bool CAndroidUtils::ScreenWake(bool bWake)
     return true;    
 }
 
+int CAndroidUtils::InstallApk(const QString szFile)
+{
+    int nRet = 0;
+    if(szFile.isEmpty())
+        return 0;
+    QAndroidJniEnvironment env;
+    QAndroidJniObject mainActive = QtAndroid::androidActivity();
+    CHECK_EXCEPTION();
+    if(mainActive.isValid())
+    {
+        QAndroidJniObject objFile = QAndroidJniObject::fromString(szFile);
+        CHECK_EXCEPTION();
+        QAndroidJniObject::callStaticMethod<void>(
+                "org/KangLinStudio/QtAndroidUtils/Utils",
+                "install",
+                "(Landroid/content/Context;Ljava/lang/String;)V",
+                mainActive.object<jobject>(),
+                objFile.object<jstring>());
+        CHECK_EXCEPTION();
+    }
+    else
+    {
+        qDebug() << "QtAndroid::androidActivity() isn't valid\n";
+    }
+    return nRet;
+}
+
+int CAndroidUtils::UninstallApk(const QString szPackageName)
+{
+    int nRet = 0;
+    if(szPackageName.isEmpty())
+        return 0;
+    QAndroidJniEnvironment env;
+    QAndroidJniObject mainActive = QtAndroid::androidActivity();
+    CHECK_EXCEPTION();
+    if(mainActive.isValid())
+    {
+        QAndroidJniObject objFile = QAndroidJniObject::fromString(szPackageName);
+        CHECK_EXCEPTION();
+        QAndroidJniObject::callStaticMethod<void>(
+                "org/KangLinStudio/QtAndroidUtils/Utils",
+                "uninstall",
+                "(Landroid/content/Context;Ljava/lang/String;)V",
+                mainActive.object<jobject>(),
+                objFile.object<jstring>());
+        CHECK_EXCEPTION();
+    }
+    else
+    {
+        qDebug() << "QtAndroid::androidActivity() isn't valid\n";
+    }
+    return nRet;
+}
+
 QString CAndroidUtils::GetAppClassName()
 {
     QAndroidJniObject appInfo = QtAndroid::androidActivity().callObjectMethod(
@@ -306,7 +360,7 @@ void CAndroidUtils::OpenCamera()
     
     jclass clsTakePhotoActivity =
             env.findClass("com/dmcbig/mediapicker/TakePhotoActivity");
-    QAndroidJniObject intent("android.content.Intent",
+    QAndroidJniObject intent("android/content/Intent",
                              "(Landroid/content/Context;Ljava/lang/Class;)V",
                              activity.object<jobject>(),
                              clsTakePhotoActivity);
@@ -342,7 +396,7 @@ void CAndroidUtils::OpenAlbum(int maxSelect)
 #else
     
     jclass clsPickerActivity = env.findClass("com/dmcbig/mediapicker/PickerActivity");
-    QAndroidJniObject intent("android.content.Intent",
+    QAndroidJniObject intent("android/content/Intent",
                              "(Landroid/content/Context;Ljava/lang/Class;)V",
                              activity.object<jobject>(),
                              clsPickerActivity);

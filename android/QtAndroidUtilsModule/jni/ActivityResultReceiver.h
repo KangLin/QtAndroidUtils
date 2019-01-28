@@ -20,7 +20,9 @@ public:
     {
         RESULT_CODE_PHOTO,
         RESULT_CODE_CAMERA,
-        RESULT_CODE_PHONE
+        RESULT_CODE_PHONE,
+        RESULT_CODE_INSTALL,
+        RESULT_CODE_UNINSTALL
     };
     
 private:

@@ -15,6 +15,7 @@ import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.content.Intent;
 
@@ -23,7 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
+
+import com.dmcbig.mediapicker.utils.FileUtils;
 
 public class Utils {
     private static final String TAG = "Utils";
@@ -55,7 +60,7 @@ public class Utils {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(a, PERMISSIONS_STORAGE,
                 REQUEST_EXTERNAL_STORAGE);
-            }
+        }
     }
 
     /**
@@ -73,13 +78,56 @@ public class Utils {
         Activity a = (Activity)activity;
         int permissionCamera = ActivityCompat.checkSelfPermission(a,
             Manifest.permission.CAMERA);
-            
-       
+
         if (PackageManager.PERMISSION_GRANTED != permissionCamera) {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(a, PERMISSIONS,
                 REQUEST_CODE);
             }
+    }
+
+    /**
+     * Install apk
+     * See: https://www.cnblogs.com/newjeremy/p/7294519.html
+     *      https://blog.csdn.net/hxy_sakura/article/details/80090933
+     * @param context
+     * @param filePath: apk file
+     */
+    public static void install(Context context, String filePath) {
+        Log.i(TAG, "install: " + filePath);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            boolean b = context.getPackageManager().canRequestPackageInstalls();
+            if(!b){
+                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+                context.startActivity(intent);
+            }
+        }
+
+        File apkFile = new File(filePath);
+        String type = "application/vnd.android.package-archive";
+        
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Log.w(TAG, "> N ，use fileProvider to install");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri =/*getImageContentUri(context, apkFile);*/
+                FileProvider.getUriForFile(
+                    context
+                    ,  context.getPackageName() + ".FileProvider"
+                    , apkFile);
+            intent.setDataAndType(contentUri, type);
+        } else {
+            intent.setDataAndType(Uri.fromFile(apkFile), type);
+        }
+        context.startActivity(intent);
+    }
+
+    public static void uninstall(Context context, String pacageName){
+        Intent intent=new Intent(Intent.ACTION_DELETE);
+        intent.setData(Uri.parse("package:" + pacageName));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     //https://blog.csdn.net/l465659833/article/details/53469441

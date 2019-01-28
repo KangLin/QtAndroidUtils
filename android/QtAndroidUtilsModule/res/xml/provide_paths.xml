@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--内部存储空间应用私有目录下cache/目录，等同于Context.getCacheDir()-->
+    <cache-path
+        name="cache_path"
+        path="."></cache-path>
+    <!--外部存储空间根目录，等同于Environment.getExternalStorageDirectory()-->
+    <external-path
+        name="external_path"
+        path="."></external-path>
+    <!--外面存储空间应用私有目录下files/目录，等同于Context.getExternalFilesDir(null)-->
+    <external-files-path
+        name="exteranl_files_path"
+        path="."></external-files-path>
+    <!--外部存储空间应用私有目录下cache/目录，等同于Context.getExternalCacheDir()-->
+    <external-cache-path
+        name="external_cache_path"
+        path="."></external-cache-path>
+    <!--内部存储空间私有目录files目录等同于Context.getFilesDir()-->
+    <files-path
+        name="files_path"
+        path="."></files-path>
+
+</paths>

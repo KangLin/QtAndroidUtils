@@ -55,6 +55,18 @@ public:
     static bool ScreenWake(bool bWake = true);
     
     /**
+     * @brief Install Apk file
+     * The following permission must be set in AndroidManifest.xml:
+     *   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+     *   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+     *   <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"></uses-permission>
+     * @param szFile
+     * @return 
+     */
+    static int InstallApk(const QString szFile);
+    static int UninstallApk(const QString szPackageName);
+    
+    /**
      * @brief Share 
      * @param title
      * @param subject

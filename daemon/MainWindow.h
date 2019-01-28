@@ -33,6 +33,10 @@ private slots:
     
     void on_ptPhone_clicked();
     
+    void on_ptInstall_clicked();
+    
+    void on_ptUnistall_clicked();
+    
 private:
     int ShowDirectory();
     

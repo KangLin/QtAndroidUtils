@@ -45,7 +45,7 @@ int CNotification::Show(const QString &szText,
     CHECK_EXCEPTION();
     QAndroidJniObject objTitle = QAndroidJniObject::fromString(szTitle);
     CHECK_EXCEPTION();
-    //*
+    
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "notify",
@@ -57,38 +57,7 @@ int CNotification::Show(const QString &szText,
             m_nID,
             bCallBack
             );
-    CHECK_EXCEPTION();//*/
-    
-    /*
-    QAndroidJniObject builder("android/app/Notification/Builder",
-                              "(Landroid/content/Context;)V",
-                              active.object<jobject>());
     CHECK_EXCEPTION();
-    builder.callObjectMethod("setContentTitle",
-                             "(Ljava/lang/String;)Landroid/app/Notification/Builder;",
-                              objTitle.object<jstring>());
-    CHECK_EXCEPTION();
-    builder.callObjectMethod("setContentText",
-                             "(Ljava/lang/String;)Landroid/app/Notification/Builder;",
-                              objText.object<jstring>());
-    CHECK_EXCEPTION();
-    QAndroidJniObject notification = builder.callObjectMethod<jobject>("build");
-    CHECK_EXCEPTION();
-    
-    QAndroidJniObject name = QAndroidJniObject::getStaticObjectField(
-                "android/content/Context",
-                "NOTIFICATION_SERVICE",
-                "Ljava/lang/String;"
-                );
-    CHECK_EXCEPTION();
-    QAndroidJniObject notificationManager = active.callObjectMethod(
-                "getSystemService",
-                "(Ljava/lang/String;)Landroid/app/NotificationManager;",
-                name.object<jstring>());
-    CHECK_EXCEPTION();
-    notificationManager.callObjectMethod("notify", "(ILjava/lang/Object;)V",
-                                         m_nID, notification.object<jobject>());
-    //*/
     return nRet;
 }
 
@@ -145,10 +114,11 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
         return nullptr;
     
     jclass clsConfig = env->FindClass("android/graphics/Bitmap$Config");
+    CHECK_EXCEPTION();
     jfieldID fieldId = env->GetStaticFieldID(clsConfig,
                                 "ARGB_8888",
                                 "Landroid/graphics/Bitmap$Config;");
-
+    CHECK_EXCEPTION();
     QAndroidJniObject config = env->GetStaticObjectField(clsConfig, fieldId);
     CHECK_EXCEPTION();
     QAndroidJniObject bitmap = 
@@ -168,12 +138,12 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
     if (AndroidBitmap_getInfo(env, bitmap.object<jobject>(), &info) < 0) {
         return nullptr;
     }
-
+    CHECK_EXCEPTION();
     void *pixels;
     if (AndroidBitmap_lockPixels(env, bitmap.object<jobject>(), &pixels) < 0) {
         return nullptr;
     }
-
+    CHECK_EXCEPTION();
     if (info.stride == uint(img.bytesPerLine())
             && info.width == uint(img.width())
             && info.height == uint(img.height())) {
@@ -186,7 +156,7 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
             memcpy(bmpPtr, img.constScanLine(y), width);
     }
     AndroidBitmap_unlockPixels(env, bitmap.object<jobject>());
-    
+    CHECK_EXCEPTION();
     return bitmap;
 }
 
@@ -207,7 +177,9 @@ int CNotification::Show(const QString &szText,
     QAndroidJniObject objTitle = QAndroidJniObject::fromString(szTitle);
     CHECK_EXCEPTION();
     QAndroidJniObject objSmallIcon = BitmapFromQImage(smallIcon);
+    CHECK_EXCEPTION();
     QAndroidJniObject objLargeIcon = BitmapFromQImage(largeIcon);
+    CHECK_EXCEPTION();
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "notify",
@@ -221,6 +193,74 @@ int CNotification::Show(const QString &szText,
             objLargeIcon.object<jobject>(),
             bCallBack
             );
+    return nRet;
+}
+
+template <typename T>
+static T GetResourceId(const QString szClass, const QString szId)
+{
+    return QAndroidJniObject::getStaticField<T>(
+                szClass.toStdString().c_str(),
+                szId.toStdString().c_str());
+}
+
+template <typename T>
+static T GetResourceId(const QString szId)
+{
+    QAndroidJniEnvironment env;
+    T ret;
+    QString szVal = szId;
+    szVal.replace('.', '/');
+    int nPos = szVal.lastIndexOf("/");
+    if(-1 == nPos )
+    {
+        qCritical() << "There is not a class";
+        return ret;
+    }
+    
+    QString szClass = szVal.left(nPos);
+    
+    QString szID = szVal.mid(nPos + 1);
+    qDebug() << "class name: " << szClass << " id: " << szID;
+    ret = GetResourceId<T>(szClass, szID);
+    CHECK_EXCEPTION();
+    return ret;
+}
+
+int CNotification::ShowFromResource(const QString &szText,
+                                    const QString &szTitle,
+                                    int nNum,
+                                    const QString &szSmallIconId,
+                                    const QString &szLargeIconId,
+                                    bool bCallBack)
+{
+    int nRet = 0;
+    QAndroidJniEnvironment env;
+    QAndroidJniObject active = QtAndroid::androidActivity();
+    CHECK_EXCEPTION();
+    QAndroidJniObject objText = QAndroidJniObject::fromString(szText);
+    CHECK_EXCEPTION();
+    QAndroidJniObject objTitle = QAndroidJniObject::fromString(szTitle);
+    CHECK_EXCEPTION();
+    int nSmall = GetResourceId<jint>(szSmallIconId);
+    CHECK_EXCEPTION();
+    int nLarge = GetResourceId<jint>(szLargeIconId);
+    CHECK_EXCEPTION();
+    qDebug() << "small id: " << nSmall << " large id: " << nLarge;
+    QAndroidJniObject::callStaticMethod<void>(
+            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+            "notify",
+            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IIIIZ)V",
+            active.object<jobject>(),
+            objText.object<jstring>(),
+            objTitle.object<jstring>(),
+            nNum,
+            m_nID,
+            nSmall,
+            nLarge,
+            bCallBack
+            );
+    CHECK_EXCEPTION();
     return nRet;
 }
 

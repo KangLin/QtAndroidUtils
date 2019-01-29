@@ -39,6 +39,23 @@ CNativeCallback::CNativeCallback(QObject *parent) : QObject(parent)
     CHECK_EXCEPTION();
 }
 
+CNativeCallback::~CNativeCallback()
+{
+    QAndroidJniEnvironment env;
+    jclass cls = env.findClass("org/KangLinStudio/QtAndroidUtils/MessageNotification");
+    env->RegisterNatives(cls, g_NativeCallBack,
+             sizeof(g_NativeCallBack) / sizeof (g_NativeCallBack[0]));
+    CHECK_EXCEPTION();
+    QAndroidJniObject active = QtAndroid::androidActivity();
+    static QAndroidJniObject notify(cls);
+    notify.callMethod<void>(
+            "clean",
+            "(Landroid/content/Context;)V",
+            active.object<jobject>()
+            );
+    CHECK_EXCEPTION();
+}
+
 CNativeCallback* CNativeCallback::instant()
 {
     static CNativeCallback* p = NULL;

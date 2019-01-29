@@ -20,14 +20,18 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
-    <application android:allowBackup="true" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ShareActivity" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:screenOrientation="unspecified" android:launchMode="singleInstance">
-
-        </activity>
+    <application
+        android:allowBackup="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".ShareActivity"
+            android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
+            android:launchMode="singleInstance"
+            android:screenOrientation="unspecified"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -36,9 +40,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provide_paths"></meta-data>
+                android:resource="@xml/provide_paths" />
         </provider>
-
     </application>
 
 </manifest>

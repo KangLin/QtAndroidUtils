@@ -26,9 +26,6 @@ import java.util.List;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
-
-import com.dmcbig.mediapicker.utils.FileUtils;
 
 public class Utils {
     private static final String TAG = "Utils";

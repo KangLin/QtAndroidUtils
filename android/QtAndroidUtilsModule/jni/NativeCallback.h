@@ -14,6 +14,7 @@ class CNativeCallback : public QObject
     Q_OBJECT
 private:
     explicit CNativeCallback(QObject *parent = nullptr);
+    virtual ~CNativeCallback();
 
 public:
     static CNativeCallback* instant();

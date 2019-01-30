@@ -7,6 +7,8 @@
 
     <uses-sdk android:minSdkVersion="16" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -22,7 +24,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -31,17 +32,7 @@
             android:name=".ShareActivity"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
             android:launchMode="singleInstance"
-            android:screenOrientation="unspecified"></activity>
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="org.KangLinStudio.QtAndroidUtils.Utils.FileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provide_paths" />
-        </provider>
+            android:screenOrientation="unspecified" />
     </application>
 
 </manifest>

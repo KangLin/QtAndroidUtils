@@ -103,15 +103,20 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
 {
     QAndroidJniEnvironment env;
     if(image.isNull())
+    {
+        qWarning() << "QAndroidJniObject: image is null";
         return nullptr;
+    }
     
     QImage img;
-    if (image.format() != QImage::Format_RGBA8888
-            && image.format() != QImage::Format_RGB16)
+    if (image.format() != QImage::Format_RGBA8888)
         img = image.convertToFormat(QImage::Format_RGBA8888);
     
     if(img.isNull())
+    {
+        qWarning() << "QAndroidJniObject: img is null";   
         return nullptr;
+    }
     
     jclass clsConfig = env->FindClass("android/graphics/Bitmap$Config");
     CHECK_EXCEPTION();
@@ -133,14 +138,16 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
     CHECK_EXCEPTION();
     if(!bitmap.isValid())
         return nullptr;
-   
+
     AndroidBitmapInfo info;
     if (AndroidBitmap_getInfo(env, bitmap.object<jobject>(), &info) < 0) {
+        qCritical() << "QAndroidJniObject AndroidBitmap_getInfo fail";
         return nullptr;
     }
     CHECK_EXCEPTION();
     void *pixels;
     if (AndroidBitmap_lockPixels(env, bitmap.object<jobject>(), &pixels) < 0) {
+        qCritical() << "QAndroidJniObject AndroidBitmap_lockPixels fail";
         return nullptr;
     }
     CHECK_EXCEPTION();

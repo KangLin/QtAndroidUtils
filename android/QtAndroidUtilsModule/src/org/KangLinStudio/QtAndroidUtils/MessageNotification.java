@@ -3,7 +3,6 @@ package org.KangLinStudio.QtAndroidUtils;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.support.v4.app.NotificationCompat;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +18,6 @@ import android.util.Log;
 /**
  * Helper class for showing and canceling message
  * notifications.
- * <p>
- * This class makes heavy use of the {@link NotificationCompat.Builder} helper
- * class to create notifications in a backward-compatible way.
  */
 public class MessageNotification {
     /**
@@ -67,29 +63,9 @@ public class MessageNotification {
         context.unregisterReceiver(m_Receiver);
     }
 
-    /**
-     * Shows the notification, or updates a previously shown notification of
-     * this type, with the given parameters.
-     * <p>
-     * TODO: Customize this method's arguments to present relevant content in
-     * the notification.
-     * <p>
-     * TODO: Customize the contents of this method to tweak the behavior and
-     * presentation of message notifications. Make
-     * sure to follow the
-     * <a href="https://developer.android.com/design/patterns/notifications.html">
-     * Notification design guidelines</a> when doing so.
-     *
-     * @see #cancel(Context)
-     */
-    public static void notify(final Context context,
-                              final String text,
-                              final String title,
-                              final int number,
-                              final int id,
-                              final Icon smallIcon,
-                              final Bitmap largeIcon,
-                              final boolean callBack) {
+    private static PendingIntent getPendingIntent(final Context context,
+                                                  final int id,
+                                                  final boolean callBack) {
         PendingIntent pi;
         if(callBack)
         {
@@ -107,162 +83,66 @@ public class MessageNotification {
                                   new Intent(context, context.getClass()),
                                   PendingIntent.FLAG_UPDATE_CURRENT);
         }
-        notify(context, text, title, number, id, smallIcon, largeIcon, pi);
+        return pi;
     }
 
-    public static void notify(final Context context,
-                              final String text,
-                              final String title,
-                              final int number,
-                              final int id,
-                              final int smallIcon,
-                              final Bitmap largeIcon,
-                              final boolean callBack) {
-        PendingIntent pi;
-        if(callBack)
-        {
-            Intent i = new Intent(ACTION_ON_CHICK);
-            i.putExtra("id", id);
-            pi = PendingIntent.getBroadcast (
-                context,
-                0,
-                i,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        } else {
-            pi = PendingIntent.getActivity(
-                context,
-                0,
-                new Intent(context, context.getClass()),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        }
-        notify(context, text, title, number, id, smallIcon, largeIcon, pi);
-    }
-
-    public static void notify(final Context context,
-                                final String text,
-                                final String title,
-                                final int number,
-                                final int id,
-                                final int smallIcon,
-                                final Bitmap largeIcon,
-                                final PendingIntent pi){
-
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-
-            // Set appropriate defaults for the notification light, sound,
-            // and vibration.
-            .setDefaults(Notification.DEFAULT_ALL)
-
-            // Set required fields, including the small icon, the
-            // notification title, and text.
-            .setContentTitle(title)
-            .setContentText(text)
-
-            // All fields below this line are optional.
-
-            // Use a default priority (recognized on devices running Android
-            // 4.1 or later)
-            .setPriority(Notification.PRIORITY_DEFAULT)
-
-            // Provide a large icon, shown with the notification in the
-            // notification drawer on devices running Android 3.0 or later.
-            //.setLargeIcon(picture)
-
-            // Set ticker text (preview) information for this notification.
-            .setTicker(text)
-
-            // Show a number. This is useful when stacking notifications of
-            // a single type.
-            .setNumber(number)
-
-            // If this notification relates to a past or upcoming event, you
-            // should set the relevant time information using the setWhen
-            // method below. If this call is omitted, the notification's
-            // timestamp will by set to the time at which it was shown.
-            // TODO: Call setWhen if this notification relates to a past or
-            // upcoming event. The sole argument to this method should be
-            // the notification timestamp in milliseconds.
-            //.setWhen(...)
-
-            // Automatically dismiss the notification when it is touched.
-            .setAutoCancel(true)
-            ;
-
-        // Set the pending intent to be initiated when the user touches
-        // the notification.
-        builder.setContentIntent(pi);
-        if(null == largeIcon)
-            Log.d(TAG, "largeIcon is null");
-        else
-            builder.setLargeIcon(largeIcon);
-
-        builder.setSmallIcon(smallIcon);
-        notify(context, builder.build(), id);
-    }
-
+    /**
+     * Shows the notification, or updates a previously shown notification of
+     * this type, with the given parameters.
+     * <p>
+     * TODO: Customize this method's arguments to present relevant content in
+     * the notification.
+     * <p>
+     * TODO: Customize the contents of this method to tweak the behavior and
+     * presentation of message notifications. Make
+     * sure to follow the
+     * <a href="https://developer.android.com/design/patterns/notifications.html">
+     * Notification design guidelines</a> when doing so.
+     *
+     * @see #cancel(Context)
+     */
     @TargetApi(Build.VERSION_CODES.M)
     public static void notify(final Context context,
                               final String text,
                               final String title,
                               final int number,
                               final int id,
-                              final Icon smallIcon,
+                              final Bitmap smallIcon,
                               final Bitmap largeIcon,
-                              final PendingIntent pi
-                              ) 
+                              final boolean callBack
+                              )
     {
         final Notification.Builder builder = new Notification.Builder(context)
-
-                // Set appropriate defaults for the notification light, sound,
-                // and vibration.
                 .setDefaults(Notification.DEFAULT_ALL)
-                          
-                // Set required fields, including the small icon, the
-                // notification title, and text.
                 .setContentTitle(title)
                 .setContentText(text)
-                          
-                // All fields below this line are optional.
-                          
-                // Use a default priority (recognized on devices running Android
-                // 4.1 or later)
                 .setPriority(Notification.PRIORITY_DEFAULT)
-                          
-                // Provide a large icon, shown with the notification in the
-                // notification drawer on devices running Android 3.0 or later.
-                //.setLargeIcon(picture)
-                          
-                // Set ticker text (preview) information for this notification.
                 .setTicker(text)
-                          
-                // Show a number. This is useful when stacking notifications of
-                // a single type.
                 .setNumber(number)
-                
-                // If this notification relates to a past or upcoming event, you
-                // should set the relevant time information using the setWhen
-                // method below. If this call is omitted, the notification's
-                // timestamp will by set to the time at which it was shown.
-                // TODO: Call setWhen if this notification relates to a past or
-                // upcoming event. The sole argument to this method should be
-                // the notification timestamp in milliseconds.
-                //.setWhen(...)
-                          
-                // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(true)
                 ;
-                
-        // Set the pending intent to be initiated when the user touches
-        // the notification.         
-        builder.setContentIntent(pi);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (null == smallIcon)
+                Log.e(TAG, "SmallIcon is null, must set setSmallIcon");
+            else {
+                Icon icon = Icon.createWithBitmap(smallIcon);
+                if(null == icon)
+                    Log.e(TAG, "icon is null");
+                builder.setSmallIcon(icon);
+            }
+        } else {
+            builder.setSmallIcon(R.drawable.icon);
+        }
         if(null == largeIcon)
             Log.d(TAG, "largeIcon is null");
         else
             builder.setLargeIcon(largeIcon);
-        if(null == smallIcon)
-            Log.e(TAG, "SmallIcon is null, must set setSmallIcon");
-        else
-            builder.setSmallIcon(smallIcon);
+
+        // Set the pending intent to be initiated when the user touches
+        // the notification.
+        PendingIntent pi = getPendingIntent(context, id, callBack);
+        builder.setContentIntent(pi);
         notify(context, builder.build(), id);            
     }
 
@@ -279,7 +159,7 @@ public class MessageNotification {
         final Resources res = context.getResources();
         final Bitmap largeIcon;
         largeIcon = BitmapFactory.decodeResource(res, R.drawable.icon);
-        notify(context, text, title, number, id, R.drawable.icon, largeIcon, callBack);
+        notify(context, text, title, number, id, largeIcon, largeIcon, callBack);
     }
 
     public static void notify(final Context context,
@@ -291,10 +171,9 @@ public class MessageNotification {
                               final int largeIconId,
                               final boolean callBack) {
         final Resources res = context.getResources();
-        final Bitmap largeIcon;
-        largeIcon = BitmapFactory.decodeResource(res, largeIconId);
-
-         notify(context, text, title, number, id, smallIconId, largeIcon, callBack);
+        final Bitmap smallIcon = BitmapFactory.decodeResource(res, smallIconId);
+        final Bitmap largeIcon = BitmapFactory.decodeResource(res, largeIconId);
+        notify(context, text, title, number, id, smallIcon, largeIcon, callBack);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -307,34 +186,8 @@ public class MessageNotification {
                               final String largeIconFile,
                               final boolean callBack) {
         final Bitmap largeIcon = BitmapFactory.decodeFile(largeIconFile);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            final Icon smallIcon = Icon.createWithFilePath(smallIconFile);
-            notify(context, text, title, number, id, smallIcon, largeIcon, callBack);
-        } else {
-            Log.e(TAG, "Current sdk [" + Build.VERSION.SDK_INT + "]" + " don't support Icon");
-            notify(context, text, title, number, id, R.drawable.icon, largeIcon, callBack);
-        }
-    }
-
-    public static void notify(final Context context,
-                              final String text,
-                              final String title,
-                              final int number,
-                              final int id,
-                              final Bitmap smallIcon,
-                              final Bitmap largeIcon,
-                              final boolean callBack) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Icon icon = null;
-            if (null != smallIcon)
-                icon = Icon.createWithBitmap(smallIcon);
-            if(null == smallIcon)
-                Log.w(TAG, "smallIcon is null");
-            notify(context, text, title, number, id, icon, largeIcon, callBack);
-        } else {
-            Log.e(TAG, "Current sdk [" + Build.VERSION.SDK_INT + "]" + " don't support Icon");
-            notify(context, text, title, number, id, R.drawable.icon, largeIcon, callBack);
-        }
+        final Bitmap smallIcon = BitmapFactory.decodeFile(smallIconFile);
+        notify(context, text, title, number, id, smallIcon, largeIcon, callBack);
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)

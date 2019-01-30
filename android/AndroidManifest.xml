@@ -79,7 +79,17 @@
                 -->
             <meta-data android:name="android.app.extract_android_style" android:value="default"/>
             <!-- extract android style -->
-    </activity>
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="org.KangLinStudio.QtAndroidUtils.Utils.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provide_paths" />
+        </provider>
 
     <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
 

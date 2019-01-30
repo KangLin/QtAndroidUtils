@@ -79,8 +79,7 @@ void MainWindow::on_pbNotification_clicked()
     //CNotification m_Notify;
     m_Notify.Show(text, "Title", 10,
                   QImage(":/icon/app"),
-                  QImage(":/icon/app"),
-                  true);
+                  QImage(":/icon/application"));
 }
 
 void MainWindow::on_pbCancelNotify_clicked()

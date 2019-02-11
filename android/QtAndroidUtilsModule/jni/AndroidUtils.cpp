@@ -215,10 +215,22 @@ bool CAndroidUtils::ScreenWake(bool bWake)
                     name.object<jstring>());
         CHECK_EXCEPTION();
         QAndroidJniObject tag = QAndroidJniObject::fromString("QtJniWakeLock");
+        CHECK_EXCEPTION();
+        jint screenBrightWakeLock = QAndroidJniObject::getStaticField<jint>(
+                    "android/os/PowerManager",
+                    "SCREEN_BRIGHT_WAKE_LOCK"
+                    );
+        CHECK_EXCEPTION();
+        jint onAfterRelease = QAndroidJniObject::getStaticField<jint>(
+                    "android/os/PowerManager",
+                    "ON_AFTER_RELEASE"
+                    );
+        CHECK_EXCEPTION();
+        jint flag = screenBrightWakeLock|onAfterRelease;
         screenLock = powerService.callObjectMethod(
                     "newWakeLock",
                     "(ILjava/lang/String;)Landroid/os/PowerManager$WakeLock;",
-                    10, //SCREEN_BRIGHT_WAKE_LOCK
+                    flag, //10, //SCREEN_BRIGHT_WAKE_LOCK
                     tag.object<jstring>()
                     );
         CHECK_EXCEPTION();
@@ -231,8 +243,9 @@ bool CAndroidUtils::ScreenWake(bool bWake)
         screenLock.callMethod<void>("acquire");
     else
         screenLock.callMethod<void>("release");
+    
     CHECK_EXCEPTION();
-    return true;    
+    return true;
 }
 
 int CAndroidUtils::InstallApk(const QString szFile)

@@ -95,11 +95,9 @@ Autrhor: KangLin(kl222@126.com)
 
 ## Contribute
 
-![Alipay contribute( More than ￥20 )](https://raw.githubusercontent.com/KangLin/RabbitIm/master/Resource/png/zhifubao.png  "Alipay contribute( More than ￥20 )")
-![WeChat payment( More than ￥20 )](https://github.com/KangLin/RabbitIm/blob/master/Resource/png/weixinpay.png "WeChat payment( More than ￥20 )")
+![Contribute( More than ￥20 )](https://github.com/KangLin/RabbitIm/blob/master/Resource/png/Contribute.png  "Contribute( More than ￥20 )")
 
-![Alipay contribute](https://raw.githubusercontent.com/KangLin/RabbitIm/master/Resource/png/zhifubao20.png  "Alipay contribute")
-![WeChat payment](https://github.com/KangLin/RabbitIm/blob/master/Resource/png/weixinpay20.png "WeChat payment")
+![Contribute](https://github.com/KangLin/RabbitIm/blob/master/Resource/png/Contribute20.png  "Contribute")
 
 ## Community :beers:
 - [GitHub](https://github.com/KangLin/QtAndroidUtils.git)

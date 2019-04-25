@@ -7,4 +7,7 @@ daemon.file = daemon/daemon.pro
 
 SUBDIRS = daemon
 
-OTHER_FILES += README.md
+OTHER_FILES += README.md \
+    .travis.yml \
+    ci/* \
+    

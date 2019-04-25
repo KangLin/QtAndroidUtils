@@ -3,11 +3,14 @@
  */
 
 #include "AndroidUtils.h"
-#include <QtAndroid>
-#include <QAndroidJniExceptionCleaner>
-#include <QtAndroidExtras>
 #include "ActivityResultReceiver.h"
-#include <QAndroidIntent>
+#include <QtAndroid>
+#include <QtAndroidExtras>
+
+#if (QT_VERSION > QT_VERSION_CHECK(5, 10, 0))
+    #include <QAndroidJniExceptionCleaner>
+    #include <QAndroidIntent>
+#endif
 
 #define CHECK_EXCEPTION() \
     if(env->ExceptionCheck())\
@@ -330,8 +333,8 @@ void CAndroidUtils::Share(const QString &title,
     
     //See: https://blog.csdn.net/ljeagle/article/details/6697360)
     int size = imageFiles.size();
-    jclass js = env.findClass("java/lang/String");
-    jobjectArray joaImgFiles = env->NewObjectArray(size, js, NULL);
+    QAndroidJniObject js("java/lang/String");
+    jobjectArray joaImgFiles = env->NewObjectArray(size, js.object<jclass>(), NULL);
     if(NULL == joaImgFiles)
         return;
     for(int i = 0; i < size; i++)
@@ -371,12 +374,11 @@ void CAndroidUtils::OpenCamera()
     CHECK_EXCEPTION();
 #else
     
-    jclass clsTakePhotoActivity =
-            env.findClass("com/dmcbig/mediapicker/TakePhotoActivity");
+    QAndroidJniObject clsTakePhotoActivity("com/dmcbig/mediapicker/TakePhotoActivity");
     QAndroidJniObject intent("android/content/Intent",
                              "(Landroid/content/Context;Ljava/lang/Class;)V",
                              activity.object<jobject>(),
-                             clsTakePhotoActivity);
+                             clsTakePhotoActivity.object<jclass>());
     CHECK_EXCEPTION();
     QtAndroid::startActivity(intent,
                              CActivityResultReceiver::RESULT_CODE_CAMERA,
@@ -408,11 +410,11 @@ void CAndroidUtils::OpenAlbum(int maxSelect)
     CHECK_EXCEPTION();
 #else
     
-    jclass clsPickerActivity = env.findClass("com/dmcbig/mediapicker/PickerActivity");
+    QAndroidJniObject clsPickerActivity("com/dmcbig/mediapicker/PickerActivity");
     QAndroidJniObject intent("android/content/Intent",
                              "(Landroid/content/Context;Ljava/lang/Class;)V",
                              activity.object<jobject>(),
-                             clsPickerActivity);
+                             clsPickerActivity.object<jclass>());
     CHECK_EXCEPTION();//*/
     /*
     QAndroidJniObject objPA = 

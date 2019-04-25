@@ -25,8 +25,8 @@ static JNINativeMethod g_NativeCallBack[] = {
 CNativeCallback::CNativeCallback(QObject *parent) : QObject(parent)
 {
     QAndroidJniEnvironment env;
-    jclass cls = env.findClass("org/KangLinStudio/QtAndroidUtils/MessageNotification");
-    env->RegisterNatives(cls, g_NativeCallBack,
+    QAndroidJniObject cls("org/KangLinStudio/QtAndroidUtils/MessageNotification");
+    env->RegisterNatives(cls.object<jclass>(), g_NativeCallBack,
              sizeof(g_NativeCallBack) / sizeof (g_NativeCallBack[0]));
     CHECK_EXCEPTION();
     QAndroidJniObject active = QtAndroid::androidActivity();
@@ -42,8 +42,8 @@ CNativeCallback::CNativeCallback(QObject *parent) : QObject(parent)
 CNativeCallback::~CNativeCallback()
 {
     QAndroidJniEnvironment env;
-    jclass cls = env.findClass("org/KangLinStudio/QtAndroidUtils/MessageNotification");
-    env->RegisterNatives(cls, g_NativeCallBack,
+    QAndroidJniObject cls("org/KangLinStudio/QtAndroidUtils/MessageNotification");
+    env->RegisterNatives(cls.object<jclass>(), g_NativeCallBack,
              sizeof(g_NativeCallBack) / sizeof (g_NativeCallBack[0]));
     CHECK_EXCEPTION();
     QAndroidJniObject active = QtAndroid::androidActivity();

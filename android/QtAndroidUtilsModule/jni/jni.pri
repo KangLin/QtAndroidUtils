@@ -1,5 +1,5 @@
 
-versionAtMost(QT_VERSION, 5.10.0) : error("Android: Qt version must greater than or equal to 5.10.0")
+versionAtMost(QT_VERSION, 5.4.0) : error("Android: Qt version must greater than or equal to 5.4.0")
 
 QT += androidextras gui
 

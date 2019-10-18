@@ -187,6 +187,11 @@ int CAndroidUtils::Vibrate(long duration)
                 "(Ljava/lang/String;)Ljava/lang/Object;",
                 name.object<jstring>());
     CHECK_EXCEPTION()
+    if(!vibrateService.isValid())
+    {
+        qDebug() << "vibrateService isn't valid";
+        return -1;
+    }
     jlong d = duration;
     vibrateService.callMethod<void>("vibrate", "(J)V", d);
     CHECK_EXCEPTION()
@@ -294,6 +299,34 @@ bool CAndroidUtils::PowerSleep(bool bSleep)
     }
     
     return true;
+}
+
+void CAndroidUtils::Reboot()
+{
+    QAndroidJniEnvironment env;
+    env->ExceptionClear();
+    QAndroidJniObject activity = QtAndroid::androidActivity();
+    CHECK_EXCEPTION()
+    QAndroidJniObject name = QAndroidJniObject::getStaticObjectField(
+                "android/content/Context",
+                "POWER_SERVICE",
+                "Ljava/lang/String;"
+                );
+    CHECK_EXCEPTION()
+    QAndroidJniObject powerService = activity.callObjectMethod(
+                "getSystemService",
+                "(Ljava/lang/String;)Ljava/lang/Object;",
+                name.object<jstring>());
+    CHECK_EXCEPTION()
+    if(!powerService.isValid())
+    {
+        qDebug() << "POWER_SERVICE isn't valid";
+        return;
+    }
+    
+    QAndroidJniObject objReason = QAndroidJniObject::fromString(QString("recovery"));
+    powerService.callMethod<void>("reboot", "(Ljava/lang/String;)V",
+                                  objReason.object<jstring>());
 }
 
 int CAndroidUtils::InstallApk(const QString szFile)

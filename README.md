@@ -93,11 +93,9 @@ Autrhor: KangLin(kl222@126.com)
           
 ---
 
-## Contribute
+## Donation
 
-![Contribute( More than ￥20 )](https://github.com/KangLin/RabbitIm/blob/master/Resource/png/Contribute.png  "Contribute( More than ￥20 )")
-
-![Contribute](https://github.com/KangLin/RabbitIm/blob/master/Resource/png/Contribute20.png  "Contribute")
+![donation](https://github.com/KangLin/RabbitCommon/raw/master/Src/Resource/image/Contribute.png "donation")
 
 ## Community :beers:
 - [GitHub](https://github.com/KangLin/QtAndroidUtils.git)

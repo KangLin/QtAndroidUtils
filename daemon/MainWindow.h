@@ -33,6 +33,8 @@ private slots:
     void on_ptInstall_clicked();
     void on_ptUnistall_clicked();
     
+    void on_rbReboot_clicked();
+    
 private:
     int ShowDirectory();
     

@@ -94,6 +94,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="rbReboot">
+        <property name="text">
+         <string>Reboot</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="0" column="1">

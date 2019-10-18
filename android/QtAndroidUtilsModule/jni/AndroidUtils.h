@@ -64,6 +64,8 @@ public:
      */
     static bool PowerSleep(bool bSleep = true);
     
+    static void Reboot();
+    
     /**
      * @brief Install Apk file
      * The following permission must be set in AndroidManifest.xml:

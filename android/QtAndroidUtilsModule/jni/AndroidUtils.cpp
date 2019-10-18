@@ -146,7 +146,7 @@ int CAndroidUtils::CallPhone(const QString szNumber)
     QAndroidJniObject objAction = QAndroidJniObject::getStaticObjectField<jstring>(
                 "android/content/Intent",
                 "ACTION_DIAL");
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     
     QString szPhone = "tel:" + szNumber;
     QAndroidJniObject uri = QAndroidJniObject::callStaticObjectMethod(
@@ -154,16 +154,16 @@ int CAndroidUtils::CallPhone(const QString szNumber)
                 "parse",
                 "(Ljava/lang/String;)Landroid/net/Uri;",
                 QAndroidJniObject::fromString(szPhone).object<jstring>());
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject intent("android/content/Intent",
                              "(Ljava/lang/String;Landroid/net/Uri;)V",
                              objAction.object<jobject>(),
                              uri.object<jobject>());
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QtAndroid::startActivity(intent,
                              CActivityResultReceiver::RESULT_CODE_PHONE
                              );
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     return nRet;
 }
 
@@ -175,59 +175,64 @@ int CAndroidUtils::Vibrate(long duration)
 {
     QAndroidJniEnvironment env;
     QAndroidJniObject active = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject name = QAndroidJniObject::getStaticObjectField(
                 "android/content/Context",
                 "VIBRATOR_SERVICE",
                 "Ljava/lang/String;"
                 );
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject vibrateService = active.callObjectMethod(
                 "getSystemService",
                 "(Ljava/lang/String;)Ljava/lang/Object;",
                 name.object<jstring>());
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     jlong d = duration;
     vibrateService.callMethod<void>("vibrate", "(J)V", d);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     return 0;
 }
 
 /*
   The following permission must be set in AndroidManifest.xml:
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
+  
+  参见： https://blog.csdn.net/qq_32115439/article/details/80169222
+        https://www.cnblogs.com/leipDao/p/8241468.html
+        
+  注意：必須成对使用（acquire、release）
 */
-bool CAndroidUtils::ScreenWake(bool bWake)
+bool CAndroidUtils::PowerWakeLock(bool bWake)
 {
     QAndroidJniEnvironment env;
     static QAndroidJniObject screenLock;
     if(!screenLock.isValid())
     {
         QAndroidJniObject activity = QtAndroid::androidActivity();
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
         QAndroidJniObject name = QAndroidJniObject::getStaticObjectField(
                     "android/content/Context",
                     "POWER_SERVICE",
                     "Ljava/lang/String;"
                     );
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
         QAndroidJniObject powerService = activity.callObjectMethod(
                     "getSystemService",
                     "(Ljava/lang/String;)Ljava/lang/Object;",
                     name.object<jstring>());
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
         QAndroidJniObject tag = QAndroidJniObject::fromString("QtJniWakeLock");
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
         jint screenBrightWakeLock = QAndroidJniObject::getStaticField<jint>(
                     "android/os/PowerManager",
                     "SCREEN_BRIGHT_WAKE_LOCK"
                     );
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
         jint onAfterRelease = QAndroidJniObject::getStaticField<jint>(
                     "android/os/PowerManager",
                     "ON_AFTER_RELEASE"
                     );
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
         jint flag = screenBrightWakeLock|onAfterRelease;
         screenLock = powerService.callObjectMethod(
                     "newWakeLock",
@@ -235,7 +240,7 @@ bool CAndroidUtils::ScreenWake(bool bWake)
                     flag, //10, //SCREEN_BRIGHT_WAKE_LOCK
                     tag.object<jstring>()
                     );
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
     }
     
     if(!screenLock.isValid())
@@ -246,7 +251,48 @@ bool CAndroidUtils::ScreenWake(bool bWake)
     else
         screenLock.callMethod<void>("release");
     
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
+    return true;
+}
+
+bool CAndroidUtils::PowerSleep(bool bSleep)
+{
+    QAndroidJniEnvironment env;
+    env->ExceptionClear();
+    QAndroidJniObject activity = QtAndroid::androidActivity();
+    CHECK_EXCEPTION()
+    QAndroidJniObject name = QAndroidJniObject::getStaticObjectField(
+                "android/content/Context",
+                "POWER_SERVICE",
+                "Ljava/lang/String;"
+                );
+    CHECK_EXCEPTION()
+    QAndroidJniObject powerService = activity.callObjectMethod(
+                "getSystemService",
+                "(Ljava/lang/String;)Ljava/lang/Object;",
+                name.object<jstring>());
+    CHECK_EXCEPTION()
+
+    jlong tm = QAndroidJniObject::callStaticMethod<jlong>(
+                "android.os.SystemClock",
+                "uptimeMillis"
+                );
+    CHECK_EXCEPTION()
+    if(!powerService.isValid())
+    {
+        qDebug() << "POWER_SERVICE isn't valid";
+        return false;
+    }
+    
+    if(bSleep)
+    {
+        powerService.callMethod<void>("goToSleep", "(J)V", tm);
+        CHECK_EXCEPTION()
+    }else{
+        powerService.callMethod<void>("wakeUp", "(J)V", tm);
+        CHECK_EXCEPTION()
+    }
+    
     return true;
 }
 
@@ -257,18 +303,18 @@ int CAndroidUtils::InstallApk(const QString szFile)
         return 0;
     QAndroidJniEnvironment env;
     QAndroidJniObject mainActive = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     if(mainActive.isValid())
     {
         QAndroidJniObject objFile = QAndroidJniObject::fromString(szFile);
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
         QAndroidJniObject::callStaticMethod<void>(
                 "org/KangLinStudio/QtAndroidUtils/Utils",
                 "install",
                 "(Landroid/content/Context;Ljava/lang/String;)V",
                 mainActive.object<jobject>(),
                 objFile.object<jstring>());
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
     }
     else
     {
@@ -284,18 +330,18 @@ int CAndroidUtils::UninstallApk(const QString szPackageName)
         return 0;
     QAndroidJniEnvironment env;
     QAndroidJniObject mainActive = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     if(mainActive.isValid())
     {
         QAndroidJniObject objFile = QAndroidJniObject::fromString(szPackageName);
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
         QAndroidJniObject::callStaticMethod<void>(
                 "org/KangLinStudio/QtAndroidUtils/Utils",
                 "uninstall",
                 "(Landroid/content/Context;Ljava/lang/String;)V",
                 mainActive.object<jobject>(),
                 objFile.object<jstring>());
-        CHECK_EXCEPTION();
+        CHECK_EXCEPTION()
     }
     else
     {
@@ -354,7 +400,7 @@ void CAndroidUtils::Share(const QString &title,
         jHtmlContext.object<jstring>(),
         joaImgFiles
    );
-   CHECK_EXCEPTION();
+   CHECK_EXCEPTION()
 
    env->DeleteLocalRef(joaImgFiles);
 }
@@ -366,11 +412,11 @@ void CAndroidUtils::OpenCamera()
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))   
     //https://github.com/DmcSDK/MediaPickerPoject
     QAndroidIntent intent(activity, "com.dmcbig.mediapicker.TakePhotoActivity");
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QtAndroid::startActivity(intent.handle(),
                              CActivityResultReceiver::RESULT_CODE_CAMERA,
                              m_pResultReceiver);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
 #else
     
     jclass clsTakePhotoActivity =
@@ -379,11 +425,11 @@ void CAndroidUtils::OpenCamera()
                              "(Landroid/content/Context;Ljava/lang/Class;)V",
                              activity.object<jobject>(),
                              clsTakePhotoActivity);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QtAndroid::startActivity(intent,
                              CActivityResultReceiver::RESULT_CODE_CAMERA,
                              m_pResultReceiver);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
 #endif   
 }
 
@@ -403,11 +449,11 @@ void CAndroidUtils::OpenAlbum(int maxSelect)
                             "(Ljava/lang/String;I)Landroid/content/Intent;",
                             maxSelectCount.object<jstring>(),
                             maxSelect);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QtAndroid::startActivity(intent.handle(),
                              CActivityResultReceiver::RESULT_CODE_PHOTO,
                              m_pResultReceiver);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
 #else
     
     jclass clsPickerActivity = env->FindClass("com/dmcbig/mediapicker/PickerActivity");
@@ -415,7 +461,7 @@ void CAndroidUtils::OpenAlbum(int maxSelect)
                              "(Landroid/content/Context;Ljava/lang/Class;)V",
                              activity.object<jobject>(),
                              clsPickerActivity);
-    CHECK_EXCEPTION();//*/
+    CHECK_EXCEPTION()//*/
     /*
     QAndroidJniObject objPA = 
         QAndroidJniObject::fromString("com.dmcbig.mediapicker.PickerActivity");
@@ -425,12 +471,12 @@ void CAndroidUtils::OpenAlbum(int maxSelect)
                 "forName",
                 "(Ljava/lang/String;)Ljava/lang/Class;",
                 objPA.object<jstring>());
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject intent("android.content.Intent",
                              "(Landroid/content/Context;Ljava/lang/Class;)V",
                              activity.object<jobject>(),
                              objPickerActivity.object<jclass>());
-    CHECK_EXCEPTION();//*/
+    CHECK_EXCEPTION()//*/
     intent.callObjectMethod("putExtra",
                             "(Ljava/lang/String;I)Landroid/content/Intent;",
                             maxSelectCount.object<jstring>(),
@@ -438,7 +484,7 @@ void CAndroidUtils::OpenAlbum(int maxSelect)
     QtAndroid::startActivity(intent,
                              CActivityResultReceiver::RESULT_CODE_PHOTO,
                              m_pResultReceiver);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
 #endif   
 }
 

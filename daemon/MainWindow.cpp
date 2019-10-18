@@ -67,8 +67,23 @@ void MainWindow::on_pbVibrate_clicked()
 void MainWindow::on_pbScreenWake_clicked()
 {
     static bool bEnable = false;
-    CAndroidUtils::ScreenWake(bEnable);
+    CAndroidUtils::PowerWakeLock(bEnable);
     bEnable = !bEnable;
+    if(bEnable)
+        ui->pbScreenWake->setText(tr("Lock screen"));
+    else
+        ui->pbScreenWake->setText(tr("Unlock screen"));
+}
+
+void MainWindow::on_pbPowerSleep_clicked()
+{
+    static bool bSleep = true;
+    CAndroidUtils::PowerSleep(bSleep);
+    bSleep = !bSleep;
+    if(bSleep)
+        ui->pbPowerSleep->setText(tr("Power sleep"));
+    else
+        ui->pbPowerSleep->setText(tr("Power wakeup"));
 }
 
 void MainWindow::on_pbNotification_clicked()

@@ -52,7 +52,17 @@ public:
      *  The following permission must be set in AndroidManifest.xml:
      *  <uses-permission android:name="android.permission.WAKE_LOCK"/>
      */
-    static bool ScreenWake(bool bWake = true);
+    static bool PowerWakeLock(bool bWake = true);
+    
+    /** Power sleep and wakeup
+     *  @para bSleep: true, power sleep
+     *               false, power wakeup
+     *  @return boolean: success is true，other is false
+     * 
+     *  The following permission must be set in AndroidManifest.xml:
+     *  <uses-permission android:name="android.permission.DEVICE_POWER"/>
+     */
+    static bool PowerSleep(bool bSleep = true);
     
     /**
      * @brief Install Apk file

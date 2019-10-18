@@ -83,7 +83,14 @@
       <item>
        <widget class="QPushButton" name="pbScreenWake">
         <property name="text">
-         <string>ScreenWake</string>
+         <string>Screen Wake</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbPowerSleep">
+        <property name="text">
+         <string>Power sleep</string>
         </property>
        </widget>
       </item>

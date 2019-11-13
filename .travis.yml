@@ -18,7 +18,7 @@ cache:
 compiler:
   - g++
 
-jdk: oraclejdk7
+#jdk: oraclejdk7
 
 os:
   - unix
@@ -43,7 +43,6 @@ before_install:
   - sudo apt-get install -y -qq xvfb xpra
   - sudo Xvfb :99 -ac &
   - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
   - mkdir ${SOURCE_DIR}/Tools
   - export VERSION="v0.0.2"
   

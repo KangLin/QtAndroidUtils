@@ -168,3 +168,8 @@ void MainWindow::on_ptUnistall_clicked()
 {
     CAndroidUtils::UninstallApk("org.KangLinStudio.QtAndroidUtils.daemon");
 }
+
+void MainWindow::on_rbReboot_clicked()
+{
+    CAndroidUtils::Reboot();
+}

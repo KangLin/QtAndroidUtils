@@ -32,41 +32,10 @@ if [ "$BUILD_TARGERT" = "android" ]; then
     export ANDROID_NDK=${ANDROID_NDK_ROOT}
 fi
 
-if [ "${BUILD_TARGERT}" = "unix" ]; then
-    if [ "$DOWNLOAD_QT" = "TRUE" ]; then
-        QT_DIR=${SOURCE_DIR}/Tools/Qt/${QT_VERSION}
-        export QT_ROOT=${QT_DIR}/${QT_VERSION}/gcc_64
-    else
-        #source /opt/qt${QT_VERSION_DIR}/bin/qt${QT_VERSION_DIR}-env.sh
-        export QT_ROOT=/opt/qt${QT_VERSION_DIR}
-    fi
-    export PATH=$QT_ROOT/bin:$PATH
-    export LD_LIBRARY_PATH=$QT_ROOT/lib/i386-linux-gnu:$QT_ROOT/lib:$LD_LIBRARY_PATH
-    export PKG_CONFIG_PATH=$QT_ROOT/lib/pkgconfig:$PKG_CONFIG_PATH
-fi
-
-if [ "$BUILD_TARGERT" != "windows_msvc" ]; then
-    RABBIT_MAKE_JOB_PARA="-j`cat /proc/cpuinfo |grep 'cpu cores' |wc -l`"  #make 同时工作进程参数
-    if [ "$RABBIT_MAKE_JOB_PARA" = "-j1" ];then
-        RABBIT_MAKE_JOB_PARA="-j2"
-    fi
-fi
-
-if [ "$BUILD_TARGERT" = "windows_mingw" \
-    -a -n "$APPVEYOR" ]; then
-    export PATH=/C/Qt/Tools/mingw${TOOLCHAIN_VERSION}/bin:$PATH
-fi
 TARGET_OS=`uname -s`
 case $TARGET_OS in
     MINGW* | CYGWIN* | MSYS*)
         export PKG_CONFIG=/c/msys64/mingw32/bin/pkg-config.exe
-        if [ "$BUILD_TARGERT" = "android" ]; then
-            ANDROID_NDK_HOST=windows-x86_64
-            if [ ! -d $ANDROID_NDK/prebuilt/${ANDROID_NDK_HOST} ]; then
-                ANDROID_NDK_HOST=windows
-            fi
-            CONFIG_PARA="${CONFIG_PARA} -DCMAKE_MAKE_PROGRAM=make" #${ANDROID_NDK}/prebuilt/${ANDROID_NDK_HOST}/bin/make.exe"
-        fi
         ;;
     Linux* | Unix*)
     ;;
@@ -96,8 +65,8 @@ case ${BUILD_TARGERT} in
         ;;
 esac
 
-${QT_ROOT}/bin/qmake ${SOURCE_DIR} \
-            "CONFIG+=release" ${CONFIG_PARA}
+${QT_ROOT}/bin/qmake ${SOURCE_DIR}/QtAndroidUtils.pro \
+     "CONFIG+=release" ${CONFIG_PARA}
             
 $MAKE
 $MAKE install INSTALL_ROOT=`pwd`/android-build

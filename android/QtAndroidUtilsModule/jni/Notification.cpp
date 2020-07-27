@@ -39,12 +39,12 @@ int CNotification::Show(const QString &szText,
     
     QAndroidJniEnvironment env;
     QAndroidJniObject active = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     
     QAndroidJniObject objText = QAndroidJniObject::fromString(szText);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject objTitle = QAndroidJniObject::fromString(szTitle);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
@@ -57,7 +57,7 @@ int CNotification::Show(const QString &szText,
             m_nID,
             bCallBack
             );
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     return nRet;
 }
 
@@ -71,16 +71,16 @@ int CNotification::Show(const QString &szText,
     int nRet = 0;
     QAndroidJniEnvironment env;
     QAndroidJniObject active = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     
     QAndroidJniObject objText = QAndroidJniObject::fromString(szText);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject objTitle = QAndroidJniObject::fromString(szTitle);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject objSmallIcon = QAndroidJniObject::fromString(szSmallIcon);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject objLargeIcon = QAndroidJniObject::fromString(szLargeIcon);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
@@ -95,7 +95,7 @@ int CNotification::Show(const QString &szText,
             objLargeIcon.object<jstring>(),
             bCallBack
             );
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     return nRet;
 }
 
@@ -119,13 +119,13 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
     }
     
     jclass clsConfig = env->FindClass("android/graphics/Bitmap$Config");
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     jfieldID fieldId = env->GetStaticFieldID(clsConfig,
                                 "ARGB_8888",
                                 "Landroid/graphics/Bitmap$Config;");
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject config = env->GetStaticObjectField(clsConfig, fieldId);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject bitmap = 
             QAndroidJniObject::callStaticObjectMethod(
                 "android/graphics/Bitmap",
@@ -135,7 +135,7 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
                 img.height(),
                 config.object<jobject>()
             );
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     if(!bitmap.isValid())
         return nullptr;
 
@@ -144,13 +144,13 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
         qCritical() << "QAndroidJniObject AndroidBitmap_getInfo fail";
         return nullptr;
     }
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     void *pixels;
     if (AndroidBitmap_lockPixels(env, bitmap.object<jobject>(), &pixels) < 0) {
         qCritical() << "QAndroidJniObject AndroidBitmap_lockPixels fail";
         return nullptr;
     }
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     if (info.stride == uint(img.bytesPerLine())
             && info.width == uint(img.width())
             && info.height == uint(img.height())) {
@@ -163,7 +163,7 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
             memcpy(bmpPtr, img.constScanLine(y), width);
     }
     AndroidBitmap_unlockPixels(env, bitmap.object<jobject>());
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     return bitmap;
 }
 
@@ -177,16 +177,16 @@ int CNotification::Show(const QString &szText,
     int nRet = 0;
     QAndroidJniEnvironment env;
     QAndroidJniObject active = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     
     QAndroidJniObject objText = QAndroidJniObject::fromString(szText);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject objTitle = QAndroidJniObject::fromString(szTitle);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject objSmallIcon = BitmapFromQImage(smallIcon);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject objLargeIcon = BitmapFromQImage(largeIcon);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "notify",
@@ -230,7 +230,7 @@ static T GetResourceId(const QString szId)
     QString szID = szVal.mid(nPos + 1);
     qDebug() << "class name: " << szClass << " id: " << szID;
     ret = GetResourceId<T>(szClass, szID);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     return ret;
 }
 
@@ -244,15 +244,15 @@ int CNotification::ShowFromResource(const QString &szText,
     int nRet = 0;
     QAndroidJniEnvironment env;
     QAndroidJniObject active = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject objText = QAndroidJniObject::fromString(szText);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject objTitle = QAndroidJniObject::fromString(szTitle);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     int nSmall = GetResourceId<jint>(szSmallIconId);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     int nLarge = GetResourceId<jint>(szLargeIconId);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     qDebug() << "small id: " << nSmall << " large id: " << nLarge;
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
@@ -267,7 +267,7 @@ int CNotification::ShowFromResource(const QString &szText,
             nLarge,
             bCallBack
             );
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     return nRet;
 }
 
@@ -276,14 +276,14 @@ int CNotification::Cancel()
     int nRet = 0;
     QAndroidJniEnvironment env;
     QAndroidJniObject active = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "cancel",
             "(Landroid/content/Context;I)V",
             active.object<jobject>(),
             m_nID);
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     return nRet;
 }
 
@@ -292,13 +292,13 @@ int CNotification::CanCelAll()
     int nRet = 0;
     QAndroidJniEnvironment env;
     QAndroidJniObject active = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     QAndroidJniObject::callStaticMethod<void>(
             "org/KangLinStudio/QtAndroidUtils/MessageNotification",
             "cancelAll",
             "(Landroid/content/Context;)V",
             active.object<jobject>());
-    CHECK_EXCEPTION();
+    CHECK_EXCEPTION()
     return nRet;
 }
 

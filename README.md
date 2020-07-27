@@ -19,10 +19,11 @@ Autrhor: KangLin(kl222@126.com)
 
 ## Source directory
 
-    |-- android/         # The library source code
-    |
-    |-- daemon/          # The library daemon code
-
+    |-- android/                          # The library source code
+    |      |-- QtAndroidUtilsModule
+    |      |      |-- jni                 # jni source code
+    |      |      |-- src                 # java source code
+    |-- daemon/                           # The library daemon code
 
 ---
 
@@ -76,7 +77,7 @@ Autrhor: KangLin(kl222@126.com)
           $ vim android.pri
           android: include(QtAndroidUtils/android/android.pri)
 
-    + Generate module library: add settings.gradle
+    + Generate module library: add the following code to settings.gradle
 
           $ cd application_root/android
           $ vim settings.gradle
@@ -87,10 +88,29 @@ Autrhor: KangLin(kl222@126.com)
           $ cd application_root/android
           $ vim build.gradle
           dependencies {
-              implementation fileTree(dir: 'libs', include: ['*.jar'])
               implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule')
           }
           
++ Use as a library
+  - Copy QtAndroidUtilsModule-release.aar to libs
+  - Add the following code to build.gradle
+  
+        $ cd application_root/android
+        $ vim build.gradle
+        repositories {
+                flatDir {
+                    dirs 'libs'
+                }
+            }
+            
+  - add the following code to dependencies
+  
+        $ cd application_root/android
+        $ vim build.gradle
+        dependencies {
+            implementation (name:'QtAndroidUtilsModule-release',ext:'aar')
+        }
+        
 ---
 
 ## Donation
@@ -98,4 +118,4 @@ Autrhor: KangLin(kl222@126.com)
 ![donation](https://github.com/KangLin/RabbitCommon/raw/master/Src/Resource/image/Contribute.png "donation")
 
 ## Community :beers:
-- [GitHub](https://github.com/KangLin/QtAndroidUtils.git)
+- [GitHub](https://github.com/KangLin/QtAndroidUtils)

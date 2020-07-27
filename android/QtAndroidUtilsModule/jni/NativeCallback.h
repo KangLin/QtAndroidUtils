@@ -7,6 +7,8 @@
 #ifndef NATIVECALLBACK_H
 #define NATIVECALLBACK_H
 
+#pragma once
+
 #include <QObject>
 
 class CNativeCallback : public QObject

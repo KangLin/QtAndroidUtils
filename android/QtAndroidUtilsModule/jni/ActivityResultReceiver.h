@@ -7,6 +7,8 @@
 #ifndef ACTIVITYRESULTRECEIVER_H
 #define ACTIVITYRESULTRECEIVER_H
 
+#pragma once
+
 #include <QAndroidActivityResultReceiver>
 #include <AndroidUtils.h>
 

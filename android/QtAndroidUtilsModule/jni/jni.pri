@@ -25,3 +25,16 @@ equals(BUILD_TEST, 1){
     SOURCES += $$PWD/Test.cpp
     HEADERS += $$PWD/Test.h
 }
+
+android {
+    ANDROID_PERMISSIONS *= android.permission.WRITE_EXTERNAL_STORAGE \
+        android.permission.READ_EXTERNAL_STORAGE \
+        android.permission.CAMERA \
+        android.permission.CALL_PHONE \
+        android.permission.VIBRATE \
+        android.permission.WAKE_LOCK \
+        android.permission.DEVICE_POWER \
+        android.permission.READ_EXTERNAL_STORAGE \
+        android.permission.WRITE_EXTERNAL_STORAGE \
+        android.permission.REQUEST_INSTALL_PACKAGES
+}

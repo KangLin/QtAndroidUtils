@@ -2,8 +2,10 @@
  * Author: KangLin(kl222@!26.com) 
  */
 
-#ifndef JAVAUTIL_H
-#define JAVAUTIL_H
+#ifndef ANDROIDUTILS_H
+#define ANDROIDUTILS_H
+
+#pragma once
 
 #include <QObject>
 
@@ -110,4 +112,4 @@ private:
     void SelectPhotos(QStringList path);
 };
 
-#endif // JAVAUTIL_H
+#endif // ANDROIDUTILS_H

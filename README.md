@@ -23,7 +23,7 @@ Autrhor: KangLin(kl222@126.com)
     |      |-- QtAndroidUtilsModule
     |      |      |-- jni                 # jni source code
     |      |      |-- src                 # java source code
-    |-- daemon/                           # The library daemon code
+    |-- daemon/                           # The daemon code
 
 ---
 

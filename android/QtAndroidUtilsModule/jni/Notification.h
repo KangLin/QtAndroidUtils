@@ -16,11 +16,18 @@ class CNotification : public QObject
 public:
     explicit CNotification(QObject *parent = nullptr);
     virtual ~CNotification();
-    
+        
     int Show(const QString &szText,
              const QString &szTitle = QString(),
              int nNum = 0,
              bool bCallBack = false);
+    int Show(const QString &szText,
+             const QString &szTitle,
+             int nNum,
+             const QImage &smallIcon,
+             const QImage &largeIcon = QImage(),
+             bool bCallBack = false);
+private:
     int Show(const QString &szText,
              const QString &szTitle,
              int nNum,
@@ -43,14 +50,8 @@ public:
                          const QString &szSmallIconId,
                          const QString &szLargeIconId,
                          bool bCallBack = false);
-    int Show(const QString &szText,
-             const QString &szTitle,
-             int nNum,
-             const QImage &smallIcon,
-             const QImage &largeIcon = QImage(),
-             bool bCallBack = false);
-    
-    
+
+public:
     int Cancel();
     static int CanCelAll();
     

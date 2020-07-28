@@ -1,26 +1,25 @@
-# Qt android utils
+# Qt android 应用库
 
-Autrhor: KangLin(kl222@126.com)
+作者: 康林(kl222@126.com)
 
 ---
 
-[<img src="Image/china.png" alt="Chinese" title="Chinese" width="16" height="16"/>Chinese](README_zh_CN.md)
-
+[<img src="Image/English.png" alt="英语" title="英语" width="16" height="16" />英语](README.md)
 
 <!-- toc -->
 
-- [Source directory](#Source-directory)
-- [Functions](#Functions)
-- [Build](#Build)
-- [Other application use the library](#Other-application-use-the-library)
-- [Contribute](#Contribute)
-- [Community :beers:](#Community-beers)
+- [源码目录](#源码目录)
+- [功能](#功能)
+- [编译](#编译)
+- [应用程序使用本库](#应用程序使用本库)
+- [捐赠](#捐赠)
+- [贡献 :beers:](#贡献-beers)
 
 <!-- tocstop -->
 
 ---
 
-## Source directory
+## 源码目录
 
     |-- android/                          # The library source code
     |      |-- QtAndroidUtilsModule
@@ -30,63 +29,63 @@ Autrhor: KangLin(kl222@126.com)
 
 ---
 
-## Functions
+## 功能
 
-- Verify storage permissions
-- Vibrate
-- Screen wake
-- Android system directory
-- Message notifiction
-- Call system album and camera
-- Share
-
----
-
-## Build
-
-+ Use Qtcreate open QtAndroidUtils.pro 
-+ build 
+- 验证存储权限
+- 振动
+- 屏幕唤醒
+- Android 系统目录
+- 消息通知
+- 调用系统摄像头和相册
+- 分享功能
 
 ---
 
-## Other application use the library
+## 编译
 
-+ Introduce this project to the application source tree
-  - If the application hasn't its own android source code
-    + Add the project to the application
++ 用 Qtcreate 打开 QtAndroidUtils.pro 
++ 编译 
+
+---
+
+## 应用程序使用本库
+
++ 做为源码使用：导入本工程到应用程序源码目录树中
+  - 如果就用程序没有自己的 android 源码
+    + 增加本工程到应用程序
 
           $ cd application_root
           $ git submodule add https://github.com/KangLin/QtAndroidUtils.git android
 
-    + Add android/android.pri to application's main profile
+    + 增加 android/android.pri 到应用程序的主 pro 文件中
 
           $ cd application_root
           $ vim application.pro
           android: include(android/android/android.pri)
 
-  - If the application has its own android source code. ag: application_root/android
+  - 如果应用程序有它自己的 android 源代码。例如: application_root/android
 
         $ ls application_root/android
         android.pri  AndroidManifest.xml  build.gradle  jni/  src/
 
-    +  then git submodle from this project to the application's android directory:
+    + 本工程做为子模块加入到应用程序的 android 目录:
 
             $ cd application_root/android  
             $ git submodule add https://github.com/KangLin/QtAndroidUtils.git
 
-    + Add QtAndroidUtils/android/android.pri to application's android.pri
+    + 增加 QtAndroidUtils/android/android.pri 到应用程序的 android.pri 中：
 
           $ cd application_root/android
           $ vim android.pri
           android: include(QtAndroidUtils/android/android.pri)
 
-    + Generate module library: add the following code to settings.gradle
+    + 生成模块库: 增加下面代码到 settings.gradle 中：
 
           $ cd application_root/android
           $ vim settings.gradle
           include ':QtAndroidUtils/android/QtAndroidUtilsModule'
           
-    + Modify build.gradle to add implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule') to dependencies
+    + 修改 build.gradle 增加 implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule') 到 dependencies
 
           $ cd application_root/android
           $ vim build.gradle
@@ -94,9 +93,9 @@ Autrhor: KangLin(kl222@126.com)
               implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule')
           }
           
-+ Use as a library
-  - Copy QtAndroidUtilsModule-release.aar to libs
-  - Add the following code to build.gradle
++ 做为库使用
+  - 复制 QtAndroidUtilsModule-release.aar 到 libs 目录中
+  - 增加下列代码到 build.gradle 文件中：
   
         $ cd application_root/android
         $ vim build.gradle
@@ -106,7 +105,7 @@ Autrhor: KangLin(kl222@126.com)
                 }
             }
             
-  - add the following code to dependencies
+  - 增加下列代码到 dependencies 块：
   
         $ cd application_root/android
         $ vim build.gradle
@@ -116,9 +115,9 @@ Autrhor: KangLin(kl222@126.com)
         
 ---
 
-## Donation
+## 捐赠
 
 ![donation](https://github.com/KangLin/RabbitCommon/raw/master/Src/Resource/image/Contribute.png "donation")
 
-## Community :beers:
+## 贡献 :beers:
 - [GitHub](https://github.com/KangLin/QtAndroidUtils)

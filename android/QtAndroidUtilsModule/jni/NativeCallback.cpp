@@ -1,3 +1,5 @@
+// Author: Kang Lin (kl222@!26.com) 
+
 #include "NativeCallback.h"
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniObject>

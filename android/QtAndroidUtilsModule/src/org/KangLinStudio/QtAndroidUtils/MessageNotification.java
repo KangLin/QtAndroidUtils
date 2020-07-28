@@ -1,3 +1,11 @@
+/*
+Author: Kang Lin (kl222@126.com)
+
+See: https://sq.163yun.com/blog/article/192705627588341760
+     https://blog.csdn.net/wangyiyungw/article/details/84615117
+     https://blog.csdn.net/u013651026/article/details/79201962
+*/
+
 package org.KangLinStudio.QtAndroidUtils;
 
 import android.annotation.TargetApi;
@@ -101,7 +109,7 @@ public class MessageNotification {
      *
      * @see #cancel(Context)
      */
-    @TargetApi(Build.VERSION_CODES.M)
+    @TargetApi(Build.VERSION_CODES.M) // version 26
     public static void notify(final Context context,
                               final String text,
                               final String title,
@@ -117,9 +125,11 @@ public class MessageNotification {
                 .setContentTitle(title)
                 .setContentText(text)
                 .setPriority(Notification.PRIORITY_DEFAULT)
-                .setTicker(text)
+                .setTicker(text)         // Show text in status bar
                 .setNumber(number)
                 .setAutoCancel(true)
+                .setWhen(System.currentTimeMillis())
+                .setOngoing(true)
                 ;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -134,6 +144,7 @@ public class MessageNotification {
         } else {
             builder.setSmallIcon(R.drawable.icon);
         }
+
         if(null == largeIcon)
             Log.d(TAG, "largeIcon is null");
         else

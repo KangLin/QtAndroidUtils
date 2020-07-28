@@ -1,8 +1,8 @@
-/*
- * THIS IS PRIVATE CLASS， YOU CAN NOT USE IT.
+/**
+ * @note   THIS IS PRIVATE CLASS， YOU CAN NOT USE IT.
+ * @brief  native call back
+ * @author Kang Lin (kl222@!26.com) 
  */
-
-// Author: KangLin(kl222@!26.com) 
 
 #ifndef NATIVECALLBACK_H
 #define NATIVECALLBACK_H
@@ -11,6 +11,7 @@
 
 #include <QObject>
 
+// @note THIS IS PRIVATE CLASS， YOU CAN NOT USE IT.
 class CNativeCallback : public QObject
 {
     Q_OBJECT

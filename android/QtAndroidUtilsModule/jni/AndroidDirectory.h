@@ -1,5 +1,6 @@
-/* Android Directory
- * Author: KangLin(kl222@!26.com) 
+/**
+ * @brief  Android Directory interface
+ * @author Kang Lin (kl222@!26.com) 
  */
 
 #ifndef __ADNROID_DIRECTORY__

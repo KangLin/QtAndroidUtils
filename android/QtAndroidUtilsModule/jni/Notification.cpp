@@ -1,3 +1,5 @@
+// Author: KangLin(kl222@!26.com) 
+
 #include "Notification.h"
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniObject>
@@ -157,7 +159,7 @@ QAndroidJniObject BitmapFromQImage(const QImage image)
         memcpy(pixels, img.constBits(), info.stride * info.height);
     } else {
         uchar *bmpPtr = static_cast<uchar *>(pixels);
-        const unsigned width = qMin(info.width, (uint)img.width()); //should be the same
+        const unsigned width = qMin(info.width, (uint)img.width());    //should be the same
         const unsigned height = qMin(info.height, (uint)img.height()); //should be the same
         for (unsigned y = 0; y < height; y++, bmpPtr += info.stride)
             memcpy(bmpPtr, img.constScanLine(y), width);
@@ -312,4 +314,5 @@ void CNotification::slotOnClick(int id)
 
 void CNotification::OnClick()
 {
+    qDebug() << "CNotification::OnClick:" << m_nID;
 }

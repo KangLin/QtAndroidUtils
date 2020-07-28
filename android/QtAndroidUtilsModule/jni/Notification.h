@@ -1,3 +1,8 @@
+/**
+ * @brief  Notification interface
+ * @author Kang Lin (kl222@!26.com) 
+ */
+
 #ifndef NOTIFICATION_H
 #define NOTIFICATION_H
 
@@ -27,7 +32,17 @@ public:
              const QImage &smallIcon,
              const QImage &largeIcon = QImage(),
              bool bCallBack = false);
-private:
+
+    /**
+     * @brief Load small and large icon from android resource
+     * @param szText
+     * @param szTitle
+     * @param nNum
+     * @param szSmallIcon
+     * @param szLargeIcon
+     * @param bCallBack
+     * @return 
+     */
     int Show(const QString &szText,
              const QString &szTitle,
              int nNum,
@@ -54,16 +69,16 @@ private:
 public:
     int Cancel();
     static int CanCelAll();
-    
+
 signals:
     void sigOnChilk();
-    
+
 public slots:
     void slotOnClick(int id);
-    
+
 protected:
     virtual void OnClick();
-    
+
 private:
     int m_nID;
 };

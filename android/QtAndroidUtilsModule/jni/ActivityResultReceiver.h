@@ -1,8 +1,8 @@
-/*
- * THIS IS PRIVATE CLASS， YOU CAN NOT USE IT.
+/**
+ * @note   THIS IS PRIVATE CLASS， YOU CAN NOT USE IT.
+ * @brief  Android Directory
+ * @author Kang Lin (kl222@!26.com) 
  */
-
-// Author: KangLin(kl222@!26.com) 
 
 #ifndef ACTIVITYRESULTRECEIVER_H
 #define ACTIVITYRESULTRECEIVER_H
@@ -12,6 +12,7 @@
 #include <QAndroidActivityResultReceiver>
 #include <AndroidUtils.h>
 
+// @note THIS IS PRIVATE CLASS， YOU CAN NOT USE IT.
 class CActivityResultReceiver : public QAndroidActivityResultReceiver
 {    
 public:

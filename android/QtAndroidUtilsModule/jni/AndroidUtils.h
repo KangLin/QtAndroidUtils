@@ -1,5 +1,6 @@
-/* Java util
- * Author: KangLin(kl222@!26.com) 
+/**
+ * @brief  Java util interface
+ * @author Kang Lin (kl222@!26.com) 
  */
 
 #ifndef ANDROIDUTILS_H
@@ -13,7 +14,7 @@ class CActivityResultReceiver;
 class Q_CORE_EXPORT CAndroidUtils : public QObject
 {
     Q_OBJECT
-    
+
 public:
     CAndroidUtils(QObject *parent = nullptr);
     virtual ~CAndroidUtils();
@@ -40,7 +41,7 @@ public:
      * @return 
      */
     static int CallPhone(const QString szNumber = QString());
-    
+
     /*
       The following permission must be set in AndroidManifest.xml:
       <uses-permission android:name="android.permission.VIBRATE"/>
@@ -55,7 +56,7 @@ public:
      *  <uses-permission android:name="android.permission.WAKE_LOCK"/>
      */
     static bool PowerWakeLock(bool bWake = true);
-    
+
     /** Power sleep and wakeup
      *  @para bSleep: true, power sleep
      *               false, power wakeup
@@ -65,7 +66,7 @@ public:
      *  <uses-permission android:name="android.permission.DEVICE_POWER"/>
      */
     static bool PowerSleep(bool bSleep = true);
-    
+
     static void Reboot();
     
     /**
@@ -79,7 +80,7 @@ public:
      */
     static int InstallApk(const QString szFile);
     static int UninstallApk(const QString szPackageName);
-    
+
     /**
      * @brief Share 
      * @param title
@@ -91,11 +92,10 @@ public:
                       const QString &content,
                       const QString &htmlContext = QString(),
                       const QStringList &imageFiles = QStringList());
- 
-    
+
     static QString GetAppClassName();
     static QString GetAppPackageName();
-    
+
     void OpenCamera();
     /**
      * @brief Open android system album
@@ -104,8 +104,7 @@ public:
     void OpenAlbum(int maxSelect = 40);
 signals:
     void sigSelectPhotos(QStringList path);
-    
-    
+
 private:
     friend CActivityResultReceiver;
     CActivityResultReceiver* m_pResultReceiver;

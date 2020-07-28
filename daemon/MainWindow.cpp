@@ -7,7 +7,7 @@
 #include <QFileDialog>
 #include <QApplication>
 
-#ifdef BUILD_TEST
+#ifdef ENABLE_TEST
     #include "Test.h"
 #endif
 
@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Q_ASSERT(check);
     check = connect(&m_AndroidUtils, SIGNAL(sigSelectPhotos(QStringList)),
                     this, SLOT(slotSelectPhoto(QStringList)));
-#ifdef BUILD_TEST
+#ifdef ENABLE_TEST
     //CTest::TestTimeout();
 #endif
 }

@@ -20,8 +20,8 @@ HEADERS += \
     $$PWD/ActivityResultReceiver.h \
     $$PWD/NativeCallback.h
 
-equals(BUILD_TEST, 1){
-    DEFINES += BUILD_TEST
+ENABLE_TEST {
+    DEFINES += ENABLE_TEST
     SOURCES += $$PWD/Test.cpp
     HEADERS += $$PWD/Test.h
 }

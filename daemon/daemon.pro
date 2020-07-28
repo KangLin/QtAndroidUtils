@@ -42,7 +42,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-BUILD_TEST=1
+CONFIG *= ENABLE_TEST
 android: include(../android/android.pri)
 
 RESOURCES += \

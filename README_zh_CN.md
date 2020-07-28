@@ -4,7 +4,8 @@
 
 ---
 
-[<img src="Image/English.png" alt="英语" title="英语" width="16" height="16" />英语](README.md)
+- [<img src="Image/English.png" alt="英语" title="英语" width="16" height="16" />英语](README.md)
+- [![Build Status](https://travis-ci.org/KangLin/QtAndroidUtils.svg?branch=master)](https://travis-ci.org/KangLin/QtAndroidUtils)
 
 <!-- toc -->
 

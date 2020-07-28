@@ -4,8 +4,8 @@ Autrhor: KangLin(kl222@126.com)
 
 ---
 
-[<img src="Image/china.png" alt="Chinese" title="Chinese" width="16" height="16"/>Chinese](README_zh_CN.md)
-
+- [<img src="Image/china.png" alt="Chinese" title="Chinese" width="16" height="16"/>Chinese](README_zh_CN.md)
+- [![Build Status](https://travis-ci.org/KangLin/QtAndroidUtils.svg?branch=master)](https://travis-ci.org/KangLin/QtAndroidUtils)
 
 <!-- toc -->
 

@@ -94,7 +94,17 @@ void MainWindow::on_pbNotification_clicked()
     //CNotification m_Notify;
     m_Notify.Show(text, "Title", 10,
                   QImage(":/icon/app"),
-                  QImage(":/icon/application"));
+                  QImage(":/icon/application")
+                  );
+//    CNotification notify;
+//    notify.Show("test", "testTitle");
+}
+
+void MainWindow::slotNotifyOnClick()
+{
+    qDebug() << "slotNotifyOnClick";
+    //showMaximized();
+    //activateWindow();
 }
 
 void MainWindow::on_pbCancelNotify_clicked()
@@ -105,13 +115,6 @@ void MainWindow::on_pbCancelNotify_clicked()
 void MainWindow::slotApplicationStateChanged(Qt::ApplicationState state)
 {
     qDebug() << "State: " << state;
-}
-
-void MainWindow::slotNotifyOnClick()
-{
-    qDebug() << "slotNotifyOnClick";
-    //showMaximized();
-    //activateWindow();
 }
 
 void MainWindow::on_pbShare_clicked()

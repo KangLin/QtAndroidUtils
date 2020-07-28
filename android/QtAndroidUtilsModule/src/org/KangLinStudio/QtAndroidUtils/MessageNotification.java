@@ -1,7 +1,8 @@
 /*
 Author: Kang Lin (kl222@126.com)
 
-See: https://sq.163yun.com/blog/article/192705627588341760
+See: https://www.jianshu.com/p/a5040cc7a693
+     https://sq.163yun.com/blog/article/192705627588341760
      https://blog.csdn.net/wangyiyungw/article/details/84615117
      https://blog.csdn.net/u013651026/article/details/79201962
 */
@@ -36,8 +37,8 @@ public class MessageNotification {
     
     private static BroadcastReceiver m_Receiver = null;
     private static native void MessageNotificationOnClickCallBack(int id);
+    
     private class MessageNotificationBroadcastReceiver extends BroadcastReceiver{
-        
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -47,7 +48,7 @@ public class MessageNotification {
                 Log.e(TAG, "Get int Extra fail");
                 return;
             }
-            
+            //Log.d(TAG, "get id:" + id);
             /* Start QtActivity
              * The following setting must be set in AndroidManifest.xml:
              * <activity android:launchMode="singleInstance" />
@@ -60,17 +61,6 @@ public class MessageNotification {
         }
     }
 
-    public void init(final Context context){
-        m_Receiver = new MessageNotificationBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_ON_CHICK);
-        context.registerReceiver(m_Receiver, intentFilter);
-    }
-
-    public void clean(final Context context){
-        context.unregisterReceiver(m_Receiver);
-    }
-
     private static PendingIntent getPendingIntent(final Context context,
                                                   final int id,
                                                   final boolean callBack) {
@@ -79,6 +69,7 @@ public class MessageNotification {
         {
             Intent i = new Intent(ACTION_ON_CHICK);
             i.putExtra("id", id);
+            //Log.d(TAG, "Put id:" + id);
             pi = PendingIntent.getBroadcast (
                                   context,
                                   0,
@@ -92,6 +83,30 @@ public class MessageNotification {
                                   PendingIntent.FLAG_UPDATE_CURRENT);
         }
         return pi;
+    }
+
+    @TargetApi(Build.VERSION_CODES.ECLAIR) //2.0
+    private static void notify(final Context context,
+                               final Notification notification,
+                               final int id) {
+        final NotificationManager nm = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+            nm.notify(TAG, id, notification);
+        } else {
+            nm.notify(id, notification);
+        }
+    }
+
+    public void init(final Context context){
+        m_Receiver = new MessageNotificationBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_ON_CHICK);
+        context.registerReceiver(m_Receiver, intentFilter);
+    }
+    
+    public void clean(final Context context){
+        context.unregisterReceiver(m_Receiver);
     }
 
     /**
@@ -199,19 +214,6 @@ public class MessageNotification {
         final Bitmap largeIcon = BitmapFactory.decodeFile(largeIconFile);
         final Bitmap smallIcon = BitmapFactory.decodeFile(smallIconFile);
         notify(context, text, title, number, id, smallIcon, largeIcon, callBack);
-    }
-
-    @TargetApi(Build.VERSION_CODES.ECLAIR)
-    private static void notify(final Context context,
-                               final Notification notification,
-                               final int id) {
-        final NotificationManager nm = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            nm.notify(TAG, id, notification);
-        } else {
-            nm.notify(id, notification);
-        }
     }
 
     /**

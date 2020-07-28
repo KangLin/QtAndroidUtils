@@ -25,13 +25,13 @@ public:
     int Show(const QString &szText,
              const QString &szTitle = QString(),
              int nNum = 0,
-             bool bCallBack = false);
+             bool bCallBack = true);
     int Show(const QString &szText,
              const QString &szTitle,
              int nNum,
              const QImage &smallIcon,
              const QImage &largeIcon = QImage(),
-             bool bCallBack = false);
+             bool bCallBack = true);
 
     /**
      * @brief Load small and large icon from android resource
@@ -48,7 +48,7 @@ public:
              int nNum,
              const QString &szSmallIcon,
              const QString &szLargeIcon = QString(),
-             bool bCallBack = false);
+             bool bCallBack = true);
     /**
      * @brief Load small and large icon from android resource file
      * @param szText：
@@ -64,7 +64,7 @@ public:
                          int nNum,
                          const QString &szSmallIconId,
                          const QString &szLargeIconId,
-                         bool bCallBack = false);
+                         bool bCallBack = true);
 
 public:
     int Cancel();

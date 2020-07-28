@@ -29,7 +29,26 @@ CNotification::CNotification(QObject *parent) : QObject(parent)
 
 CNotification::~CNotification()
 {
+    CNativeCallback::instant()->disconnect(this);
+    
+    //TODO: If need ?
     Cancel();
+}
+
+void CNotification::slotOnClick(int id)
+{
+    if(m_nID != id)
+    {
+        qDebug() << "m_nID != id:" << m_nID << "!=" << id;
+        return;
+    }
+    OnClick();
+    emit sigOnChilk();
+}
+
+void CNotification::OnClick()
+{
+    //qDebug() << "CNotification::OnClick:" << m_nID;
 }
 
 int CNotification::Show(const QString &szText,
@@ -302,17 +321,4 @@ int CNotification::CanCelAll()
             active.object<jobject>());
     CHECK_EXCEPTION()
     return nRet;
-}
-
-void CNotification::slotOnClick(int id)
-{
-    if(m_nID != id)
-        return;
-    OnClick();
-    emit sigOnChilk();
-}
-
-void CNotification::OnClick()
-{
-    qDebug() << "CNotification::OnClick:" << m_nID;
 }

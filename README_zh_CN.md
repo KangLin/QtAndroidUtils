@@ -4,8 +4,8 @@
 
 ---
 
-- [<img src="Image/English.png" alt="英语" title="英语" width="16" height="16" />英语](README.md)
-- [![Build Status](https://travis-ci.org/KangLin/QtAndroidUtils.svg?branch=master)](https://travis-ci.org/KangLin/QtAndroidUtils)
+[<img src="Image/English.png" alt="英语" title="英语" width="16" height="16" />英语](README.md) 
+[![Build Status](https://travis-ci.org/KangLin/QtAndroidUtils.svg?branch=master)](https://travis-ci.org/KangLin/QtAndroidUtils)
 
 <!-- toc -->
 
@@ -24,8 +24,8 @@
 
     |-- android/                          # The library source code
     |      |-- QtAndroidUtilsModule
-    |      |      |-- jni                 # jni source code
-    |      |      |-- src                 # java source code
+    |             |-- jni                 # jni source code
+    |             |-- src                 # java source code
     |-- daemon/                           # The daemon code
 
 ---
@@ -46,6 +46,9 @@
 
 + 用 Qtcreate 打开 QtAndroidUtils.pro 
 + 编译 
++ 生成库
+  - JNI库(*.so) : libQtAndroidUtilsModule.so
+  - Android 库(*.aar): QtAndroidUtilsModule-*.aar
 
 ---
 
@@ -71,49 +74,58 @@
 
     + 本工程做为子模块加入到应用程序的 android 目录:
 
-            $ cd application_root/android  
+            $ cd application_root/android
             $ git submodule add https://github.com/KangLin/QtAndroidUtils.git
 
-    + 增加 QtAndroidUtils/android/android.pri 到应用程序的 android.pri 中：
+    + 增加 jni 模块到应用程序的 android.pri 中：
 
           $ cd application_root/android
           $ vim android.pri
-          android: include(QtAndroidUtils/android/android.pri)
+          // 增加 JNI
+          android: include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
+          // 或者
+          //android: include(QtAndroidUtils/android/android.pri)
 
-    + 生成模块库: 增加下面代码到 settings.gradle 中：
+    + 增加 JAVA 模块
+      - 增加生成 JAVA 模块代码到 settings.gradle 中：
 
-          $ cd application_root/android
-          $ vim settings.gradle
-          include ':QtAndroidUtils/android/QtAndroidUtilsModule'
+            $ cd application_root/android
+            $ vim settings.gradle
+            include ':QtAndroidUtils/android/QtAndroidUtilsModule'
           
-    + 修改 build.gradle 增加 implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule') 到 dependencies
+      - 修改 build.gradle 增加 implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule') 到 dependencies 块
 
+            $ cd application_root/android
+            $ vim build.gradle
+            dependencies {
+                implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule')
+            }
+          
++ 做为库使用
+  * Android 库(*.aar)
+    - 复制 QtAndroidUtilsModule-release.aar 到 libs 目录中
+    - 增加下列代码到 build.gradle 文件中：
+  
+          $ cd application_root/android
+          $ vim build.gradle
+          repositories {
+              flatDir {
+                  dirs 'libs'
+              }
+          }
+            
+    - 增加下列代码到 dependencies 块：
+  
           $ cd application_root/android
           $ vim build.gradle
           dependencies {
-              implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule')
+              implementation (name:'QtAndroidUtilsModule-release',ext:'aar')
           }
-          
-+ 做为库使用
-  - 复制 QtAndroidUtilsModule-release.aar 到 libs 目录中
-  - 增加下列代码到 build.gradle 文件中：
-  
-        $ cd application_root/android
-        $ vim build.gradle
-        repositories {
-                flatDir {
-                    dirs 'libs'
-                }
-            }
-            
-  - 增加下列代码到 dependencies 块：
-  
-        $ cd application_root/android
-        $ vim build.gradle
-        dependencies {
-            implementation (name:'QtAndroidUtilsModule-release',ext:'aar')
-        }
         
+  * JNI 库(*.so)
+    - 导入库 libQtAndroidUtilsModule.so
+    - 包含头文件
+    
 ---
 
 ## 捐赠

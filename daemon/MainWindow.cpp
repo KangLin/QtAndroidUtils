@@ -96,8 +96,9 @@ void MainWindow::on_pbNotification_clicked()
                   QImage(":/icon/app"),
                   QImage(":/icon/application")
                   );
-//    CNotification notify;
-//    notify.Show("test", "testTitle");
+    
+    m_Notify1.Show("test", "testTitle", 1,QImage(":/icon/app"),
+                   QImage(":/icon/application"));
 }
 
 void MainWindow::slotNotifyOnClick()

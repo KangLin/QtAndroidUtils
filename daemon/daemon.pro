@@ -39,6 +39,7 @@ MOBILITY =
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
+else: android: target.path = /.
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 

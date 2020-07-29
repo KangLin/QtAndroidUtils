@@ -1,3 +1,4 @@
+isEmpty(ANDROID_PACKAGE_SOURCE_DIR): ANDROID_PACKAGE_SOURCE_DIR = $$PWD
 
 include(jni/jni.pri)
 

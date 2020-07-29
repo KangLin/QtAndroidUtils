@@ -4,8 +4,8 @@ Autrhor: KangLin(kl222@126.com)
 
 ---
 
-- [<img src="Image/china.png" alt="Chinese" title="Chinese" width="16" height="16"/>Chinese](README_zh_CN.md)
-- [![Build Status](https://travis-ci.org/KangLin/QtAndroidUtils.svg?branch=master)](https://travis-ci.org/KangLin/QtAndroidUtils)
+[<img src="Image/china.png" alt="Chinese" title="Chinese" width="16" height="16"/>Chinese](README_zh_CN.md) 
+[![Build Status](https://travis-ci.org/KangLin/QtAndroidUtils.svg?branch=master)](https://travis-ci.org/KangLin/QtAndroidUtils)
 
 <!-- toc -->
 
@@ -24,8 +24,8 @@ Autrhor: KangLin(kl222@126.com)
 
     |-- android/                          # The library source code
     |      |-- QtAndroidUtilsModule
-    |      |      |-- jni                 # jni source code
-    |      |      |-- src                 # java source code
+    |             |-- jni                 # jni source code
+    |             |-- src                 # java source code
     |-- daemon/                           # The daemon code
 
 ---
@@ -44,8 +44,11 @@ Autrhor: KangLin(kl222@126.com)
 
 ## Build
 
-+ Use Qtcreate open QtAndroidUtils.pro 
-+ build 
++ Use Qtcreate open QtAndroidUtils.pro
++ build
++ Generate library
+  - JNI(*.so) : libQtAndroidUtilsModule.so
+  - Android(*.aar): QtAndroidUtilsModule-*.aar
 
 ---
 
@@ -74,46 +77,55 @@ Autrhor: KangLin(kl222@126.com)
             $ cd application_root/android  
             $ git submodule add https://github.com/KangLin/QtAndroidUtils.git
 
-    + Add QtAndroidUtils/android/android.pri to application's android.pri
+    + Add jni modul to application's android.pri
 
           $ cd application_root/android
           $ vim android.pri
-          android: include(QtAndroidUtils/android/android.pri)
+          // Add jni
+          android: include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
+          // Or
+          //android: include(QtAndroidUtils/android/android.pri)
 
-    + Generate module library: add the following code to settings.gradle
+    + Add java modul 
+      - Generate module library: add the following code to settings.gradle
 
-          $ cd application_root/android
-          $ vim settings.gradle
-          include ':QtAndroidUtils/android/QtAndroidUtilsModule'
+            $ cd application_root/android
+            $ vim settings.gradle
+            include ':QtAndroidUtils/android/QtAndroidUtilsModule'
           
-    + Modify build.gradle to add implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule') to dependencies
+      - Modify build.gradle to add implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule') to dependencies
 
+            $ cd application_root/android
+            $ vim build.gradle
+            dependencies {
+                implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule')
+            }
+          
++ Use as a library
+  * Android (*.aar)
+    - Copy QtAndroidUtilsModule-release.aar to libs
+    - Add the following code to build.gradle
+  
+          $ cd application_root/android
+          $ vim build.gradle
+          repositories {
+              flatDir {
+                  dirs 'libs'
+              }
+          }
+            
+    - add the following code to dependencies
+  
           $ cd application_root/android
           $ vim build.gradle
           dependencies {
-              implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule')
+              implementation (name:'QtAndroidUtilsModule-release',ext:'aar')
           }
-          
-+ Use as a library
-  - Copy QtAndroidUtilsModule-release.aar to libs
-  - Add the following code to build.gradle
-  
-        $ cd application_root/android
-        $ vim build.gradle
-        repositories {
-                flatDir {
-                    dirs 'libs'
-                }
-            }
-            
-  - add the following code to dependencies
-  
-        $ cd application_root/android
-        $ vim build.gradle
-        dependencies {
-            implementation (name:'QtAndroidUtilsModule-release',ext:'aar')
-        }
-        
+    
+  * JNI (*.so)
+    - Import library: libQtAndroidUtilsModule.so
+    - inlude heade files
+    
 ---
 
 ## Donation

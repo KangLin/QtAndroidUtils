@@ -13,10 +13,13 @@ SOURCES += \
     $$PWD/ActivityResultReceiver.cpp \
     $$PWD/NativeCallback.cpp
 
-HEADERS += \ 
+INSTALL_HEADERS += \
     $$PWD/AndroidDirectory.h \
     $$PWD/AndroidUtils.h \
-    $$PWD/Notification.h \
+    $$PWD/Notification.h 
+
+HEADERS += \
+    $$INSTALL_HEADERS \
     $$PWD/ActivityResultReceiver.h \
     $$PWD/NativeCallback.h
 

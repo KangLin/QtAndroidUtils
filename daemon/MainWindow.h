@@ -40,7 +40,7 @@ private:
     
 private:
     Ui::MainWindow *ui;
-    CNotification m_Notify;
+    CNotification m_Notify, m_Notify1;
     CAndroidUtils m_AndroidUtils;
 };
 

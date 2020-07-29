@@ -1,6 +1,6 @@
 #ANDROID source directory, Please set it in main profile 
 
-isEmpty(ANDROID_PACKAGE_SOURCE_DIR) : ANDROID_PACKAGE_SOURCE_DIR = $$PWD
+isEmpty(ANDROID_PACKAGE_SOURCE_DIR): ANDROID_PACKAGE_SOURCE_DIR = $$PWD
 
 include(QtAndroidUtilsModule/QtAndroidUtilsModule.pri)
 
@@ -10,6 +10,7 @@ include(QtAndroidUtilsModule/QtAndroidUtilsModule.pri)
 #     If it isn't exist, then add settings.gradle to $$ANDROID_PACKAGE_SOURCE_DIR,
 #        include ':QtAndroidUtilsModule'
 #        to import QtAndroidUtilsModule*.aar
+
 OTHER_FILES += \
     $$PWD/AndroidManifest.xml \
     $$PWD/build.gradle \

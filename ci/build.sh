@@ -108,9 +108,10 @@ ${QT_ROOT}/bin/qmake ${SOURCE_DIR}/QtAndroidUtils.pro \
             
 $MAKE
 $MAKE install INSTALL_ROOT=`pwd`/android-build
+echo "deploy qt ......"
 ${QT_ROOT}/bin/androiddeployqt \
      --input `pwd`/daemon/android-libQtAndroidUtilsDaemon.so-deployment-settings.json \
-     --output `pwd`/android-build \ 
+     --output `pwd`/android-build \
      --android-platform ${ANDROID_API} \
      --gradle --verbose
      #--jdk ${JAVA_HOME}

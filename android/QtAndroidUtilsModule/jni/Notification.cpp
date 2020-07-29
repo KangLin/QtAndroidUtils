@@ -19,7 +19,7 @@ CNotification::CNotification(QObject *parent) : QObject(parent)
 {
     static int id = 0;
     m_nID = id++;
-    
+    qDebug() << "CNotification:" << this;
     bool check = connect(CNativeCallback::instant(),
                          SIGNAL(sigMessageNotificationOnClickCallBack(int)),
                          this,
@@ -37,6 +37,7 @@ CNotification::~CNotification()
 
 void CNotification::slotOnClick(int id)
 {
+    qDebug() << "CNotification::slotOnClick" << this;
     if(m_nID != id)
     {
         qDebug() << "m_nID != id:" << m_nID << "!=" << id;

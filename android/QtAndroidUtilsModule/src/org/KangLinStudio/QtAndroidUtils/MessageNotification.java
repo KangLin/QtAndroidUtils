@@ -24,6 +24,9 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
+import com.drivemode.intentlog.IntentLogger;
+import com.drivemode.intentlog.PendingIntentLogger;
+
 /**
  * Helper class for showing and canceling message
  * notifications.
@@ -48,7 +51,9 @@ public class MessageNotification {
                 Log.e(TAG, "Get int Extra fail");
                 return;
             }
-            //Log.d(TAG, "get id:" + id);
+//            Log.d(TAG, "get id:" + id);
+//            IntentLogger.dump("get", intent);
+            
             /* Start QtActivity
              * The following setting must be set in AndroidManifest.xml:
              * <activity android:launchMode="singleInstance" />
@@ -69,7 +74,8 @@ public class MessageNotification {
         {
             Intent i = new Intent(ACTION_ON_CHICK);
             i.putExtra("id", id);
-            //Log.d(TAG, "Put id:" + id);
+//            Log.d(TAG, "Put id:" + id);
+//            IntentLogger.dump("put", i);
             pi = PendingIntent.getBroadcast (
                                   context,
                                   0,

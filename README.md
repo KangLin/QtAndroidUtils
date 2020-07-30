@@ -77,20 +77,24 @@ Autrhor: KangLin(kl222@126.com)
             $ cd application_root/android  
             $ git submodule add https://github.com/KangLin/QtAndroidUtils.git
 
-    + Add jni modul to application's android.pri
+    + Add jni module to application's android.pri
 
           $ cd application_root/android
           $ vim android.pri
-          // Add jni
-          android: include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
-          // Or
-          //android: include(QtAndroidUtils/android/android.pri)
+          # Add jni
+          android {
+              # Include pri
+              include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
+              # Include header files path
+              INCLUDEPATH *= QtAndroidUtils/android/QtAndroidUtilsModule/jni
+          }
 
-    + Add java modul 
+    + Add java module 
       - Generate module library: add the following code to settings.gradle
 
             $ cd application_root/android
             $ vim settings.gradle
+            // Add to compile aar module
             include ':QtAndroidUtils/android/QtAndroidUtilsModule'
           
       - Modify build.gradle to add implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule') to dependencies
@@ -98,6 +102,7 @@ Autrhor: KangLin(kl222@126.com)
             $ cd application_root/android
             $ vim build.gradle
             dependencies {
+                // Add aar project
                 implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule')
             }
           
@@ -119,6 +124,7 @@ Autrhor: KangLin(kl222@126.com)
           $ cd application_root/android
           $ vim build.gradle
           dependencies {
+              // Add aar module
               implementation (name:'QtAndroidUtilsModule-release',ext:'aar')
           }
     

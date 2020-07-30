@@ -81,16 +81,20 @@
 
           $ cd application_root/android
           $ vim android.pri
-          // 增加 JNI
-          android: include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
-          // 或者
-          //android: include(QtAndroidUtils/android/android.pri)
+          # 增加 jni
+          android {
+              # 包含 pri 文件
+              include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
+              # 包含头文件路径
+              INCLUDEPATH *= QtAndroidUtils/android/QtAndroidUtilsModule/jni
+          }
 
     + 增加 JAVA 模块
       - 增加生成 JAVA 模块代码到 settings.gradle 中：
 
             $ cd application_root/android
             $ vim settings.gradle
+            // 增加编译模块
             include ':QtAndroidUtils/android/QtAndroidUtilsModule'
           
       - 修改 build.gradle 增加 implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule') 到 dependencies 块
@@ -98,6 +102,7 @@
             $ cd application_root/android
             $ vim build.gradle
             dependencies {
+                // 增加依赖项目
                 implementation project(':QtAndroidUtils/android/QtAndroidUtilsModule')
             }
           

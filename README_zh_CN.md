@@ -77,17 +77,24 @@
             $ cd application_root/android
             $ git submodule add https://github.com/KangLin/QtAndroidUtils.git
 
-    + 增加 jni 模块到应用程序的 android.pri 中：
+    + 增加 jni 模块到应用程序的工程中
+      - qmake 工程 ( android.pri )：
 
-          $ cd application_root/android
-          $ vim android.pri
-          # 增加 jni
-          android {
-              # 包含 pri 文件
-              include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
-              # 包含头文件路径
-              INCLUDEPATH *= QtAndroidUtils/android/QtAndroidUtilsModule/jni
-          }
+            $ cd application_root/android
+            $ vim android.pri
+            # 增加 jni
+            android {
+                # 包含 pri 文件
+                include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
+                # 包含头文件路径
+                INCLUDEPATH *= QtAndroidUtils/android/QtAndroidUtilsModule/jni
+            }
+
+      - cmake 工程
+
+            $ cd application_root
+            $ vim CMakeLists.txt
+            add_subdirectory(android/QtAndroidUtils/android/QtAndroidUtilsModule/jni)
 
     + 增加 JAVA 模块
       - 增加生成 JAVA 模块代码到 settings.gradle 中：
@@ -128,8 +135,12 @@
           }
         
   * JNI 库(*.so)
-    - 导入库 libQtAndroidUtilsModule.so
-    - 包含头文件
+    - qmake 工程
+      + 导入库 libQtAndroidUtilsModule.so
+      + 包含头文件
+    - cmake 工程
+
+          find_package(QtAndroidUtilsModule)
     
 ---
 

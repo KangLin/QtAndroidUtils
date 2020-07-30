@@ -41,3 +41,7 @@ android {
         android.permission.WRITE_EXTERNAL_STORAGE \
         android.permission.REQUEST_INSTALL_PACKAGES
 }
+
+OTHER_FILES += \
+    $$PWD/CMakeLists.txt \
+    $$PWD/QtAndroidUtilsModule.pc.in

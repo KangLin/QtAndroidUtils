@@ -77,17 +77,24 @@ Autrhor: KangLin(kl222@126.com)
             $ cd application_root/android  
             $ git submodule add https://github.com/KangLin/QtAndroidUtils.git
 
-    + Add jni module to application's android.pri
+    + Add jni module to application project file
+      - qmake project: android.pri
 
-          $ cd application_root/android
-          $ vim android.pri
-          # Add jni
-          android {
-              # Include pri
-              include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
-              # Include header files path
-              INCLUDEPATH *= QtAndroidUtils/android/QtAndroidUtilsModule/jni
-          }
+            $ cd application_root/android
+            $ vim android.pri
+            # Add jni
+            android {
+                # Include pri
+                include(QtAndroidUtils/android/QtAndroidUtilsModule/jni/jni.pri)
+                # Include header files path
+                INCLUDEPATH *= QtAndroidUtils/android/QtAndroidUtilsModule/jni
+            }
+
+      - cmake project
+
+            $ cd application_root
+            $ vim CMakeLists.txt
+            add_subdirectory(android/QtAndroidUtils/android/QtAndroidUtilsModule/jni)
 
     + Add java module 
       - Generate module library: add the following code to settings.gradle
@@ -129,9 +136,13 @@ Autrhor: KangLin(kl222@126.com)
           }
     
   * JNI (*.so)
-    - Import library: libQtAndroidUtilsModule.so
-    - inlude heade files
+    - qmake project
+      + Import library: libQtAndroidUtilsModule.so
+      + inlude heade files
+    - cmake project
     
+          find_package(QtAndroidUtilsModule)
+
 ---
 
 ## Donation

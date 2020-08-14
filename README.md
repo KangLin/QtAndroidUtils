@@ -147,7 +147,7 @@ Autrhor: KangLin(kl222@126.com)
 
 ## Donation
 
-![donation](https://github.com/KangLin/RabbitCommon/raw/master/Src/Resource/image/Contribute.png "donation")
+[![donation](https://gitee.com/kl222/RabbitCommon/raw/master/Src/Resource/image/Contribute.png "donation")](https://gitee.com/kl222/RabbitCommon/raw/master/Src/Resource/image/Contribute.png "donation")
 
 ## Community :beers:
 - [GitHub](https://github.com/KangLin/QtAndroidUtils)

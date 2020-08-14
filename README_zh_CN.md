@@ -146,7 +146,7 @@
 
 ## 捐赠
 
-![donation](https://github.com/KangLin/RabbitCommon/raw/master/Src/Resource/image/Contribute.png "donation")
+[![捐赠](https://gitee.com/kl222/RabbitCommon/raw/master/Src/Resource/image/Contribute.png "捐赠")](https://gitee.com/kl222/RabbitCommon/raw/master/Src/Resource/image/Contribute.png "捐赠")
 
 ## 贡献 :beers:
 - [GitHub](https://github.com/KangLin/QtAndroidUtils)

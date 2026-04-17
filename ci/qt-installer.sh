@@ -5,7 +5,7 @@
 #http://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server
 #http://doc.qt.io/qtinstallerframework/noninteractive.html
 #参考：https://github.com/benlau/qtci
-#     https://github.com/rabits/dockerfiles
+#     https://github.com/rabbits/dockerfiles
 #     https://github.com/mjscosta/qt-silent-installer
 
 set -e #quit on error
@@ -49,13 +49,13 @@ case $BUILD_ARCH in
                     SELECTEDPACKAGES=android_x86_64
                     ;;
                 *)
-                    echo "Aach[$BUILD_ARCH] don't suppoert"
+                    echo "Aach[$BUILD_ARCH] don't support"
                     ;;
             esac
         fi
         ;;
     *)
-        echo "Aach[$BUILD_ARCH] don't suppoert"
+        echo "Aach[$BUILD_ARCH] don't support"
         ;;
 esac
 

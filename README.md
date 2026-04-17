@@ -36,7 +36,7 @@ Autrhor: KangLin(kl222@126.com)
 - Vibrate
 - Screen wake
 - Android system directory
-- Message notifiction
+- Message notification
 - Call system album and camera
 - Share
 
@@ -138,7 +138,7 @@ Autrhor: KangLin(kl222@126.com)
   * JNI (*.so)
     - qmake project
       + Import library: libQtAndroidUtilsModule.so
-      + inlude heade files
+      + include head files
     - cmake project
     
           find_package(QtAndroidUtilsModule)

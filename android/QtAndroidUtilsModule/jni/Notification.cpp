@@ -11,7 +11,7 @@
 #define CHECK_EXCEPTION() \
     if(env->ExceptionCheck())\
     {\
-    qDebug() << __FILE__ << "(" << __LINE__ << ")" << "exception occured";\
+    qDebug() << __FILE__ << "(" << __LINE__ << ")" << "exception occurred";\
     env->ExceptionClear(); \
     }
 

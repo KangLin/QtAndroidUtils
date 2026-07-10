@@ -1,9 +1,18 @@
-// Author: KangLin(kl222@!26.com) 
+// Author: KangLin(kl222@!26.com)
+
+
+#include <QLoggingCategory>
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    #include <QJniObject>
+#else
+    #include <QAndroidJniObject>
+    #include <QAndroidJniEnvironment>
+#endif
 
 #include "ActivityResultReceiver.h"
-#include <QtDebug>
-#include <QAndroidJniObject>
-#include <QAndroidJniEnvironment>
+
+static Q_LOGGING_CATEGORY(log, "Receiver")
 
 CActivityResultReceiver::CActivityResultReceiver(CAndroidUtils* pUtils)
 {
@@ -11,9 +20,17 @@ CActivityResultReceiver::CActivityResultReceiver(CAndroidUtils* pUtils)
     m_pUtils = pUtils;
 }
 
-void CActivityResultReceiver::handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data)
+void CActivityResultReceiver::handleActivityResult(
+    int receiverRequestCode,
+    int resultCode,
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    const QJniObject &data
+#else
+    const QAndroidJniObject &data
+#endif
+    )
 {
-    qDebug() << "handleActivityResult, requestCode - " << receiverRequestCode
+    qDebug(log) << "handleActivityResult, requestCode - " << receiverRequestCode
           << " resultCode - " << resultCode
           << " data - " << data.toString();
     
@@ -23,6 +40,16 @@ void CActivityResultReceiver::handleActivityResult(int receiverRequestCode, int 
     {
         if(!data.isValid())
             break;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        jint nResultCode =
+            QJniObject::getStaticField<jint>
+            ("com.dmcbig.mediapicker.PickerConfig", "RESULT_CODE");
+        if(((int) nResultCode) != resultCode)
+            break;
+        auto obResultExtra =
+            QJniObject::getStaticObjectField<jstring>
+            ("com.dmcbig.mediapicker.PickerConfig", "EXTRA_RESULT");
+#else
         jint nResultCode =
                 QAndroidJniObject::getStaticField<jint>
                 ("com.dmcbig.mediapicker.PickerConfig", "RESULT_CODE");
@@ -31,7 +58,8 @@ void CActivityResultReceiver::handleActivityResult(int receiverRequestCode, int 
         QAndroidJniObject obResultExtra = 
            QAndroidJniObject::getStaticObjectField<jstring>
            ("com.dmcbig.mediapicker.PickerConfig", "EXTRA_RESULT");
-        QAndroidJniObject objSel = data.callObjectMethod("getParcelableArrayListExtra",
+#endif
+        auto objSel = data.callObjectMethod("getParcelableArrayListExtra",
                               "(Ljava/lang/String;)Ljava/util/ArrayList;",
                               obResultExtra.object<jstring>());
         int selectNumber = objSel.callMethod<jint>("size");
@@ -39,10 +67,10 @@ void CActivityResultReceiver::handleActivityResult(int receiverRequestCode, int 
         QStringList lstPath;
         for(int i = 0; i < selectNumber; i++)
         {
-            QAndroidJniObject media = objSel.callObjectMethod("get",
+            auto media = objSel.callObjectMethod("get",
                                             "(I)Ljava/lang/Object;",
                                             i);
-            QAndroidJniObject objPath = media.getObjectField<jstring>("path");
+            auto objPath = media.getObjectField<jstring>("path");
             //qDebug() << objPath.toString();
             lstPath << objPath.toString();
         }

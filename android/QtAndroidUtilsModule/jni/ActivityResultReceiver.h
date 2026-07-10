@@ -8,8 +8,11 @@
 #define ACTIVITYRESULTRECEIVER_H
 
 #pragma once
-
-#include <QAndroidActivityResultReceiver>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    #include <QtCore/private/qandroidextras_p.h>
+#else
+    #include <QAndroidActivityResultReceiver>
+#endif
 #include <AndroidUtils.h>
 
 // @note THIS IS PRIVATE CLASS， YOU CAN NOT USE IT.
@@ -17,8 +20,15 @@ class CActivityResultReceiver : public QAndroidActivityResultReceiver
 {    
 public:
     CActivityResultReceiver(CAndroidUtils* pUtils);
-    virtual void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data);
-        
+    virtual void handleActivityResult(int receiverRequestCode,
+                                      int resultCode,
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                                      const QJniObject &data
+#else
+                                      const QAndroidJniObject &data
+#endif
+                                      );
+
     enum RESULT_CODE
     {
         RESULT_CODE_PHOTO,

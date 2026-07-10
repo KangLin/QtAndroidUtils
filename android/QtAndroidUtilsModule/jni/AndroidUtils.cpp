@@ -4,12 +4,20 @@
 
 #include "AndroidUtils.h"
 #include "ActivityResultReceiver.h"
-#include <QtAndroidExtras>
-#include <QtAndroid>
-#if (QT_VERSION > QT_VERSION_CHECK(5, 10, 0))
-    #include <QAndroidIntent>
-    #include <QAndroidJniExceptionCleaner>
+
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+    #include <QCoreApplication>
+    #include <QtCore/private/qandroidextras_p.h>
+#else
+    #include <QtAndroidExtras>
+    #include <QtAndroid>
+    #if (QT_VERSION > QT_VERSION_CHECK(5, 10, 0))
+        #include <QAndroidIntent>
+        #include <QAndroidJniExceptionCleaner>
+    #endif
 #endif
+
+#include "RabbitCommonTools.h"
 
 #define CHECK_EXCEPTION() \
     if(env->ExceptionCheck())\
@@ -18,11 +26,9 @@
     env->ExceptionClear(); \
     }
 
-
 CAndroidUtils::CAndroidUtils(QObject *parent) :  QObject(parent)
 {
     m_pResultReceiver = new CActivityResultReceiver(this);
-    
 }
 
 CAndroidUtils::~CAndroidUtils()
@@ -46,102 +52,59 @@ int CAndroidUtils::InitPermissions()
 int CAndroidUtils::InitExternalStoragePermissions()
 {
     int nRet = 0;
-    QAndroidJniEnvironment env;
-    
     /*
      The following permission must be set in AndroidManifest.xml:
      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     */
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    QStringList lstPermission;
-    QtAndroid::PermissionResult r;
-    r = QtAndroid::checkPermission("android.permission.READ_EXTERNAL_STORAGE");
-    if(QtAndroid::PermissionResult::Denied == r)
-    {
-        lstPermission << "android.permission.READ_EXTERNAL_STORAGE";
-    }
-    r = QtAndroid::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
-    if(QtAndroid::PermissionResult::Denied == r)
-    {
-        lstPermission << "android.permission.WRITE_EXTERNAL_STORAGE";
-    }
-    if(!lstPermission.isEmpty())
-        QtAndroid::requestPermissionsSync(lstPermission);
-#else
-    
-    /* Checks if the app has permission to read and write to device storage
-     * If the app does not has permission then the user will be prompted to
-     * grant permissions, When android > 6.0(SDK API > 23)
-     */
-    QAndroidJniObject mainActive = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
-    if(mainActive.isValid())
-    {
-        QAndroidJniObject::callStaticMethod<void>(
-                "org/KangLinStudio/QtAndroidUtils/Utils",
-                "verifyStoragePermissions",
-                "(Landroid/app/Activity;)V",
-                mainActive.object<jobject>());
-        CHECK_EXCEPTION();
-    }
-    else
-    {
-        qDebug() << "QtAndroid::androidActivity() isn't valid\n";
-    }
-#endif
-
+    QStringList permission;
+    permission << "android.permission.READ_EXTERNAL_STORAGE" << "android.permission.READ_EXTERNAL_STORAGE";
+    RabbitCommon::CTools::AndroidRequestPermission(permission);
     return nRet;
 }
 
 int CAndroidUtils::InitCameraPermissions()
 {
     int nRet = 0;
-    QAndroidJniEnvironment env;
-    
     /*
      The following permission must be set in AndroidManifest.xml:
      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     */
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    QStringList lstPermission;
-    QtAndroid::PermissionResult r;
-    r = QtAndroid::checkPermission("android.permission.CAMERA");
-    if(QtAndroid::PermissionResult::Denied == r)
-    {
-        lstPermission << "android.permission.CAMERA";
-    }
-    if(!lstPermission.isEmpty())
-        QtAndroid::requestPermissionsSync(lstPermission);
-#else
-    
-    /* Checks if the app has permission to read and write to device storage
-     * If the app does not has permission then the user will be prompted to
-     * grant permissions, When android > 6.0(SDK API > 23)
-     */
-    QAndroidJniObject mainActive = QtAndroid::androidActivity();
-    CHECK_EXCEPTION();
-    if(mainActive.isValid())
-    {
-        QAndroidJniObject::callStaticMethod<void>(
-                "org/KangLinStudio/QtAndroidUtils/Utils",
-                "verifyCameraPermissions",
-                "(Landroid/app/Activity;)V",
-                mainActive.object<jobject>());
-        CHECK_EXCEPTION();
-    }
-    else
-    {
-        qDebug() << "QtAndroid::androidActivity() isn't valid\n";
-    }
-#endif
+    QStringList permission;
+    permission << "android.permission.CAMERA";
+    RabbitCommon::CTools::AndroidRequestPermission(permission);
     return nRet;
 }
 
 int CAndroidUtils::CallPhone(const QString szNumber)
 {
     int nRet = 0;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QJniEnvironment env;
+    QJniObject objAction = QJniObject::getStaticObjectField<jstring>(
+        "android/content/Intent",
+        "ACTION_DIAL");
+    CHECK_EXCEPTION()
+
+    QString szPhone = "tel:" + szNumber;
+    QJniObject uri = QJniObject::callStaticObjectMethod(
+        "android/net/Uri",
+        "parse",
+        "(Ljava/lang/String;)Landroid/net/Uri;",
+        QJniObject::fromString(szPhone).object<jstring>());
+    CHECK_EXCEPTION()
+    QJniObject intent("android/content/Intent",
+                      "(Ljava/lang/String;Landroid/net/Uri;)V",
+                      objAction.object<jobject>(),
+                      uri.object<jobject>());
+    CHECK_EXCEPTION()
+    QtAndroidPrivate::startActivity(
+        intent,
+        CActivityResultReceiver::RESULT_CODE_PHONE
+        );
+    CHECK_EXCEPTION()
+#else
     QAndroidJniEnvironment env;
     QAndroidJniObject objAction = QAndroidJniObject::getStaticObjectField<jstring>(
                 "android/content/Intent",
@@ -164,6 +127,7 @@ int CAndroidUtils::CallPhone(const QString szNumber)
                              CActivityResultReceiver::RESULT_CODE_PHONE
                              );
     CHECK_EXCEPTION()
+#endif
     return nRet;
 }
 
@@ -173,6 +137,30 @@ int CAndroidUtils::CallPhone(const QString szNumber)
 */
 int CAndroidUtils::Vibrate(long duration)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QJniEnvironment env;
+    QJniObject active = QNativeInterface::QAndroidApplication::context();
+    CHECK_EXCEPTION()
+    QJniObject name = QJniObject::getStaticObjectField(
+        "android/content/Context",
+        "VIBRATOR_SERVICE",
+        "Ljava/lang/String;"
+        );
+    CHECK_EXCEPTION()
+    QJniObject vibrateService = active.callObjectMethod(
+        "getSystemService",
+        "(Ljava/lang/String;)Ljava/lang/Object;",
+        name.object<jstring>());
+    CHECK_EXCEPTION()
+    if(!vibrateService.isValid())
+    {
+        qDebug() << "vibrateService isn't valid";
+        return -1;
+    }
+    jlong d = duration;
+    vibrateService.callMethod<void>("vibrate", "(J)V", d);
+    CHECK_EXCEPTION()
+#else
     QAndroidJniEnvironment env;
     QAndroidJniObject active = QtAndroid::androidActivity();
     CHECK_EXCEPTION()
@@ -195,6 +183,7 @@ int CAndroidUtils::Vibrate(long duration)
     jlong d = duration;
     vibrateService.callMethod<void>("vibrate", "(J)V", d);
     CHECK_EXCEPTION()
+#endif
     return 0;
 }
 
@@ -209,6 +198,8 @@ int CAndroidUtils::Vibrate(long duration)
 */
 bool CAndroidUtils::PowerWakeLock(bool bWake)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#else
     QAndroidJniEnvironment env;
     static QAndroidJniObject screenLock;
     if(!screenLock.isValid())
@@ -257,11 +248,14 @@ bool CAndroidUtils::PowerWakeLock(bool bWake)
         screenLock.callMethod<void>("release");
     
     CHECK_EXCEPTION()
+#endif
     return true;
 }
 
 bool CAndroidUtils::PowerSleep(bool bSleep)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#else
     QAndroidJniEnvironment env;
     env->ExceptionClear();
     QAndroidJniObject activity = QtAndroid::androidActivity();
@@ -297,12 +291,14 @@ bool CAndroidUtils::PowerSleep(bool bSleep)
         powerService.callMethod<void>("wakeUp", "(J)V", tm);
         CHECK_EXCEPTION()
     }
-    
+#endif
     return true;
 }
 
 void CAndroidUtils::Reboot()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#else
     QAndroidJniEnvironment env;
     env->ExceptionClear();
     QAndroidJniObject activity = QtAndroid::androidActivity();
@@ -327,6 +323,7 @@ void CAndroidUtils::Reboot()
     QAndroidJniObject objReason = QAndroidJniObject::fromString(QString("recovery"));
     powerService.callMethod<void>("reboot", "(Ljava/lang/String;)V",
                                   objReason.object<jstring>());
+#endif
 }
 
 int CAndroidUtils::InstallApk(const QString szFile)
@@ -334,6 +331,8 @@ int CAndroidUtils::InstallApk(const QString szFile)
     int nRet = 0;
     if(szFile.isEmpty())
         return 0;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#else
     QAndroidJniEnvironment env;
     QAndroidJniObject mainActive = QtAndroid::androidActivity();
     CHECK_EXCEPTION()
@@ -353,6 +352,7 @@ int CAndroidUtils::InstallApk(const QString szFile)
     {
         qDebug() << "QtAndroid::androidActivity() isn't valid\n";
     }
+#endif
     return nRet;
 }
 
@@ -361,6 +361,8 @@ int CAndroidUtils::UninstallApk(const QString szPackageName)
     int nRet = 0;
     if(szPackageName.isEmpty())
         return 0;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#else
     QAndroidJniEnvironment env;
     QAndroidJniObject mainActive = QtAndroid::androidActivity();
     CHECK_EXCEPTION()
@@ -380,21 +382,29 @@ int CAndroidUtils::UninstallApk(const QString szPackageName)
     {
         qDebug() << "QtAndroid::androidActivity() isn't valid\n";
     }
+#endif
     return nRet;
 }
 
 QString CAndroidUtils::GetAppClassName()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+
+#else
     QAndroidJniObject appInfo = QtAndroid::androidActivity().callObjectMethod(
                     "getApplicationInfo",
                     "()Landroid/content/pm/ApplicationInfo;");
     
     return appInfo.getObjectField<jstring>("className").toString();
+#endif
 }
 
 QString CAndroidUtils::GetAppPackageName()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#else
     return QtAndroid::androidActivity().callObjectMethod<jstring>("getPackageName").toString();
+#endif
 }
 
 void CAndroidUtils::Share(const QString &title,
@@ -403,6 +413,8 @@ void CAndroidUtils::Share(const QString &title,
                           const QString &htmlContext,
                           const QStringList &imageFiles)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#else
     QAndroidJniEnvironment env;
     QAndroidJniObject jTitle = QAndroidJniObject::fromString(title);
     QAndroidJniObject jSubject = QAndroidJniObject::fromString(subject);
@@ -436,10 +448,13 @@ void CAndroidUtils::Share(const QString &title,
    CHECK_EXCEPTION()
 
    env->DeleteLocalRef(joaImgFiles);
+#endif
 }
 
 void CAndroidUtils::OpenCamera()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#else
     QAndroidJniEnvironment env;
     QAndroidJniObject activity = QtAndroid::androidActivity();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))   
@@ -463,11 +478,14 @@ void CAndroidUtils::OpenCamera()
                              CActivityResultReceiver::RESULT_CODE_CAMERA,
                              m_pResultReceiver);
     CHECK_EXCEPTION()
-#endif   
+#endif
+#endif
 }
 
 void CAndroidUtils::OpenAlbum(int maxSelect)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#else
     QAndroidJniEnvironment env;
     QAndroidJniObject activity = QtAndroid::androidActivity();
     QAndroidJniObject maxSelectCount = 
@@ -518,7 +536,8 @@ void CAndroidUtils::OpenAlbum(int maxSelect)
                              CActivityResultReceiver::RESULT_CODE_PHOTO,
                              m_pResultReceiver);
     CHECK_EXCEPTION()
-#endif   
+#endif
+#endif
 }
 
 void CAndroidUtils::SelectPhotos(QStringList path)

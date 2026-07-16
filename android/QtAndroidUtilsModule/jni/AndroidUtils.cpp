@@ -341,7 +341,7 @@ int CAndroidUtils::InstallApk(const QString szFile)
         QAndroidJniObject objFile = QAndroidJniObject::fromString(szFile);
         CHECK_EXCEPTION()
         QAndroidJniObject::callStaticMethod<void>(
-                "org/KangLinStudio/QtAndroidUtils/Utils",
+                "io/github/KangLin/QtAndroidUtils/Utils",
                 "install",
                 "(Landroid/content/Context;Ljava/lang/String;)V",
                 mainActive.object<jobject>(),
@@ -371,7 +371,7 @@ int CAndroidUtils::UninstallApk(const QString szPackageName)
         QAndroidJniObject objFile = QAndroidJniObject::fromString(szPackageName);
         CHECK_EXCEPTION()
         QAndroidJniObject::callStaticMethod<void>(
-                "org/KangLinStudio/QtAndroidUtils/Utils",
+                "io/github/KangLin/QtAndroidUtils/Utils",
                 "uninstall",
                 "(Landroid/content/Context;Ljava/lang/String;)V",
                 mainActive.object<jobject>(),
@@ -435,7 +435,7 @@ void CAndroidUtils::Share(const QString &title,
     
     QAndroidJniObject activity = QtAndroid::androidActivity();
     QAndroidJniObject::callStaticMethod<void>(
-        "org/KangLinStudio/QtAndroidUtils/Utils",
+        "io/github/KangLin/QtAndroidUtils/Utils",
         "share",
         "(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V",
         activity.object<jobject>(),

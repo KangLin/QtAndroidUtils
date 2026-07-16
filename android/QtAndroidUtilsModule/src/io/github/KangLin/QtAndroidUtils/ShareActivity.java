@@ -1,4 +1,4 @@
-package org.KangLinStudio.QtAndroidUtils;
+package io.github.KangLin.QtAndroidUtils;
 
 import android.content.Intent;
 import android.net.Uri;

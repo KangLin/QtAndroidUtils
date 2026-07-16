@@ -9,7 +9,7 @@ CTest::CTest(QObject *parent) : QObject(parent)
 int CTest::TestTimeout()
 {
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/QtAndroidUtils/Test",
+            "io/github/KangLin/QtAndroidUtils/Test",
             "timeOut"
            );
     return 0;

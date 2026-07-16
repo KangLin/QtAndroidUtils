@@ -77,7 +77,7 @@ int CNotification::Show(const QString &szText,
     CHECK_EXCEPTION()
 
     QJniObject::callStaticMethod<void>(
-        "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+        "io/github/KangLin/QtAndroidUtils/MessageNotification",
         "notify",
         "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IIZ)V",
         active.object<jobject>(),
@@ -98,7 +98,7 @@ int CNotification::Show(const QString &szText,
     CHECK_EXCEPTION()
     
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+            "io/github/KangLin/QtAndroidUtils/MessageNotification",
             "notify",
             "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IIZ)V",
             active.object<jobject>(),
@@ -136,7 +136,7 @@ int CNotification::Show(const QString &szText,
     CHECK_EXCEPTION()
 
     QJniObject::callStaticMethod<void>(
-        "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+        "io/github/KangLin/QtAndroidUtils/MessageNotification",
         "notify",
         "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILjava/lang/String;Ljava/lang/String;Z)V",
         active.object<jobject>(),
@@ -164,7 +164,7 @@ int CNotification::Show(const QString &szText,
     CHECK_EXCEPTION()
     
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+            "io/github/KangLin/QtAndroidUtils/MessageNotification",
             "notify",
             "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILjava/lang/String;Ljava/lang/String;Z)V",
             active.object<jobject>(),
@@ -342,7 +342,7 @@ int CNotification::Show(const QString &szText,
     QJniObject objLargeIcon = BitmapFromQImage(largeIcon);
     CHECK_EXCEPTION()
     QJniObject::callStaticMethod<void>(
-        "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+        "io/github/KangLin/QtAndroidUtils/MessageNotification",
         "notify",
         "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILandroid/graphics/Bitmap;Landroid/graphics/Bitmap;Z)V",
         active.object<jobject>(),
@@ -368,7 +368,7 @@ int CNotification::Show(const QString &szText,
     QAndroidJniObject objLargeIcon = BitmapFromQImage(largeIcon);
     CHECK_EXCEPTION()
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+            "io/github/KangLin/QtAndroidUtils/MessageNotification",
             "notify",
             "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IILandroid/graphics/Bitmap;Landroid/graphics/Bitmap;Z)V",
             active.object<jobject>(),
@@ -447,7 +447,7 @@ int CNotification::ShowFromResource(const QString &szText,
     CHECK_EXCEPTION()
     qDebug() << "small id: " << nSmall << " large id: " << nLarge;
     QJniObject::callStaticMethod<void>(
-        "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+        "io/github/KangLin/QtAndroidUtils/MessageNotification",
         "notify",
         "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IIIIZ)V",
         active.object<jobject>(),
@@ -474,7 +474,7 @@ int CNotification::ShowFromResource(const QString &szText,
     CHECK_EXCEPTION()
     qDebug() << "small id: " << nSmall << " large id: " << nLarge;
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+            "io/github/KangLin/QtAndroidUtils/MessageNotification",
             "notify",
             "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;IIIIZ)V",
             active.object<jobject>(),
@@ -499,7 +499,7 @@ int CNotification::Cancel()
     QJniObject active = QNativeInterface::QAndroidApplication::context();
     CHECK_EXCEPTION()
     QJniObject::callStaticMethod<void>(
-        "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+        "io/github/KangLin/QtAndroidUtils/MessageNotification",
         "cancel",
         "(Landroid/content/Context;I)V",
         active.object<jobject>(),
@@ -510,7 +510,7 @@ int CNotification::Cancel()
     QAndroidJniObject active = QtAndroid::androidActivity();
     CHECK_EXCEPTION()
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+            "io/github/KangLin/QtAndroidUtils/MessageNotification",
             "cancel",
             "(Landroid/content/Context;I)V",
             active.object<jobject>(),
@@ -528,7 +528,7 @@ int CNotification::CanCelAll()
     QJniObject active = QNativeInterface::QAndroidApplication::context();
     CHECK_EXCEPTION()
     QJniObject::callStaticMethod<void>(
-        "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+        "io/github/KangLin/QtAndroidUtils/MessageNotification",
         "cancelAll",
         "(Landroid/content/Context;)V",
         active.object<jobject>());
@@ -538,7 +538,7 @@ int CNotification::CanCelAll()
     QAndroidJniObject active = QtAndroid::androidActivity();
     CHECK_EXCEPTION()
     QAndroidJniObject::callStaticMethod<void>(
-            "org/KangLinStudio/QtAndroidUtils/MessageNotification",
+            "io/github/KangLin/QtAndroidUtils/MessageNotification",
             "cancelAll",
             "(Landroid/content/Context;)V",
             active.object<jobject>());

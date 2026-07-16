@@ -38,7 +38,7 @@ CNativeCallback::CNativeCallback(QObject *parent) : QObject(parent)
 #else
     QAndroidJniEnvironment env;
 #endif
-    jclass cls = env->FindClass("org/KangLinStudio/QtAndroidUtils/MessageNotification");
+    jclass cls = env->FindClass("io/github/KangLin/QtAndroidUtils/MessageNotification");
     env->RegisterNatives(cls, g_NativeCallBack,
              sizeof(g_NativeCallBack) / sizeof (g_NativeCallBack[0]));
     CHECK_EXCEPTION()
@@ -64,7 +64,7 @@ CNativeCallback::~CNativeCallback()
 #else
     QAndroidJniEnvironment env;
 #endif
-    jclass cls = env->FindClass("org/KangLinStudio/QtAndroidUtils/MessageNotification");
+    jclass cls = env->FindClass("io/github/KangLin/QtAndroidUtils/MessageNotification");
     env->RegisterNatives(cls, g_NativeCallBack,
                          sizeof(g_NativeCallBack) / sizeof (g_NativeCallBack[0]));
     CHECK_EXCEPTION()

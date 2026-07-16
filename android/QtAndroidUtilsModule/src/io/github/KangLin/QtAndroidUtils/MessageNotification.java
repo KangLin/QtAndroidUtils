@@ -7,7 +7,7 @@ See: https://www.jianshu.com/p/a5040cc7a693
      https://blog.csdn.net/u013651026/article/details/79201962
 */
 
-package org.KangLinStudio.QtAndroidUtils;
+package io.github.KangLin.QtAndroidUtils;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -36,7 +36,7 @@ public class MessageNotification {
      * The unique identifier for this type of notification.
      */
     private static final String TAG = "MessageNotification";
-    private static final String ACTION_ON_CHICK = "org.KangLinStudio.QtAndroidUtils.MessageNotification.OnClick";
+    private static final String ACTION_ON_CHICK = "io.github.KangLin.QtAndroidUtils.MessageNotification.OnClick";
     
     private static BroadcastReceiver m_Receiver = null;
     private static native void MessageNotificationOnClickCallBack(int id);

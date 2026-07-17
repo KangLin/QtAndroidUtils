@@ -67,6 +67,7 @@ int CNotification::Show(const QString &szText,
     int nRet = 0;
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return 0;
     QJniEnvironment env;
     QJniObject active = QNativeInterface::QAndroidApplication::context();
     CHECK_EXCEPTION()
@@ -122,6 +123,7 @@ int CNotification::Show(const QString &szText,
 {
     int nRet = 0;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return 0;
     QJniEnvironment env;
     QJniObject active = QNativeInterface::QAndroidApplication::context();
     CHECK_EXCEPTION()
@@ -329,6 +331,7 @@ int CNotification::Show(const QString &szText,
 {
     int nRet = 0;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return 0;
     QJniEnvironment env;
     QJniObject active = QNativeInterface::QAndroidApplication::context();
     CHECK_EXCEPTION()
@@ -434,6 +437,7 @@ int CNotification::ShowFromResource(const QString &szText,
 {
     int nRet = 0;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return 0;
     QJniEnvironment env;
     QJniObject active = QNativeInterface::QAndroidApplication::context();
     CHECK_EXCEPTION()
@@ -495,6 +499,7 @@ int CNotification::Cancel()
 {
     int nRet = 0;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return 0;
     QJniEnvironment env;
     QJniObject active = QNativeInterface::QAndroidApplication::context();
     CHECK_EXCEPTION()
@@ -524,6 +529,7 @@ int CNotification::CanCelAll()
 {
     int nRet = 0;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return 0;
     QJniEnvironment env;
     QJniObject active = QNativeInterface::QAndroidApplication::context();
     CHECK_EXCEPTION()

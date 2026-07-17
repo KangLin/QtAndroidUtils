@@ -16,16 +16,18 @@ import android.database.Cursor;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.content.Intent;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.net.Uri;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.net.Uri;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.content.FileProvider;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 public class Utils {
     private static final String TAG = "Utils";

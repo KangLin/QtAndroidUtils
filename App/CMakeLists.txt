@@ -74,15 +74,15 @@ message(STATUS "Version Code: ${QT_ANDROID_VERSION_CODE}, Version Name: ${QT_AND
 set_target_properties(${PROJECT_NAME} PROPERTIES
     # Android 包名
     QT_ANDROID_PACKAGE_NAME "io.github.KangLinStudio.QtAndroidUtils"
-    QT_ANDROID_APP_NAME "@string/app_name"
-    QT_ANDROID_APP_ICON "@drawable/icon"
+    #QT_ANDROID_APP_NAME "@string/app_name"
+    #QT_ANDROID_APP_ICON "@drawable/icon"
     QT_ANDROID_VERSION_CODE ${QT_ANDROID_VERSION_CODE}
     QT_ANDROID_VERSION_NAME ${QT_ANDROID_VERSION_NAME}
     # 最小 SDK 版本
     QT_ANDROID_MIN_SDK_VERSION 28
     # 目标 SDK 版本
     QT_ANDROID_TARGET_SDK_VERSION 34
-    QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../Android
+    #QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../Android
 )
 
 qt_add_android_permission(${PROJECT_NAME}

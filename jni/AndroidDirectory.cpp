@@ -112,7 +112,6 @@ QString CAndroidDirectory::GetAppFilesDirectory()
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QJniObject activity = QNativeInterface::QAndroidApplication::context();
-
 #else
     QAndroidJniObject activity = QtAndroid::androidActivity();
 #endif
@@ -126,7 +125,6 @@ QString CAndroidDirectory::GetAppCacheDirectory()
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QJniObject activity = QNativeInterface::QAndroidApplication::context();
-
 #else
     QAndroidJniObject activity = QtAndroid::androidActivity();
 #endif

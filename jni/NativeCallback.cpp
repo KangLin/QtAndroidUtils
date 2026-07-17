@@ -33,6 +33,8 @@ static JNINativeMethod g_NativeCallBack[] = {
 
 CNativeCallback::CNativeCallback(QObject *parent) : QObject(parent)
 {
+    //TODO:
+    return;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QJniEnvironment env;
 #else
@@ -59,6 +61,8 @@ CNativeCallback::CNativeCallback(QObject *parent) : QObject(parent)
 
 CNativeCallback::~CNativeCallback()
 {
+    //TODO:
+    return;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     QJniEnvironment env;
 #else

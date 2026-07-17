@@ -24,8 +24,8 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
-import com.drivemode.intentlog.IntentLogger;
-import com.drivemode.intentlog.PendingIntentLogger;
+//import com.drivemode.intentlog.IntentLogger;
+//import com.drivemode.intentlog.PendingIntentLogger;
 
 /**
  * Helper class for showing and canceling message
